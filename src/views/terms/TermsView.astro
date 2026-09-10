@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@app/layouts/BaseLayout.astro';
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { ROUTES } from '@shared/i18n/routes';
+import PageHero from '@widgets/page-hero/PageHero.astro';
+import LegalLayout from '@widgets/legal/LegalLayout.astro';
+import LegalSidebar from '@widgets/legal/LegalSidebar.astro';
+import LegalSummary from '@widgets/legal/LegalSummary.astro';
+import LegalSection from '@widgets/legal/LegalSection.astro';
+import { TERMS_META, TERMS_SECTIONS } from '@entities/legal/model/terms-of-service';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  path={ROUTES.terms}
+  title={t('terms.seoTitle')}
+  description={t('terms.seoDescription')}
+>
+  <PageHero overline={t('terms.hero.overline')} title={t('terms.hero.title')} lead={t('terms.hero.lead')} />
+
+  <LegalLayout>
+    <LegalSidebar slot="sidebar" locale={locale} meta={TERMS_META} sections={TERMS_SECTIONS} />
+    <article>
+      <LegalSummary locale={locale} meta={TERMS_META} />
+      {TERMS_SECTIONS.map((section) => (
+        <LegalSection locale={locale} section={section} />
+      ))}
+    </article>
+  </LegalLayout>
+</BaseLayout>

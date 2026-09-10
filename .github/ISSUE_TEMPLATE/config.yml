@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Soporte y dudas sobre el producto
+    url: https://pseudolearn.app/contact
+    about: Para preguntas sobre la aplicación o el lenguaje, no sobre este repositorio.
+  - name: Vulnerabilidades de seguridad
+    url: https://github.com/cgutieco/fe-pseudolearn/security/policy
+    about: No abras una issue pública. Escribe a soporte@pseudolearn.app.

@@ -1,0 +1,123 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { Icon } from '@shared/ui/icon';
+import { ANCHORS } from '@shared/config/site';
+import type { DownloadCardModel } from './download-cards';
+
+export interface Props {
+  locale: Locale;
+  card: DownloadCardModel;
+}
+
+const { locale, card } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<article class="pl-card download-card">
+  <h3 class="download-card__title">
+    <Icon name={card.icon} size={22} strokeWidth={1.6} class="download-card__icon" />
+    <span>{t(card.titleKey)}</span>
+    <span class="pl-tag">{t('home.downloads.availableTag')}</span>
+  </h3>
+  <div class="download-card__actions">
+    {card.actions.map((action) => (
+      <a
+        class:list={['pl-btn', action.variant, 'pl-btn--sm']}
+        href={action.href ?? `#${ANCHORS.downloads}`}
+        target={action.external ? '_blank' : undefined}
+        rel={action.external ? 'noopener noreferrer' : undefined}
+      >
+        {t(action.labelKey)}
+      </a>
+    ))}
+  </div>
+  <dl class="download-card__specs">
+    {card.specs.map((spec) => (
+      <div class="download-card__spec">
+        <dt>{t(spec.labelKey)}</dt>
+        <dd>{t(spec.valueKey)}</dd>
+      </div>
+    ))}
+  </dl>
+</article>
+
+<style>
+  .download-card {
+    padding: 20px 18px;
+  }
+
+  .download-card__title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 14px;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+  }
+
+  .download-card :global(.download-card__icon) {
+    color: var(--pl-brand);
+  }
+
+  .download-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: var(--pl-space-md);
+  }
+
+  .download-card__actions :global(.pl-btn) {
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .download-card__specs {
+    font-size: 13px;
+    line-height: 19px;
+  }
+
+  .download-card__spec {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    margin-bottom: 7px;
+  }
+
+  .download-card__spec dt {
+    color: var(--pl-ink-3);
+  }
+
+  .download-card__spec dd {
+    margin: 0;
+    color: var(--pl-ink-2);
+  }
+
+  @media (min-width: 900px) {
+    .download-card {
+      padding: 28px;
+    }
+
+    .download-card__title {
+      margin-bottom: 18px;
+      font-size: 21px;
+    }
+
+    .download-card__actions {
+      margin-bottom: 20px;
+    }
+
+    .download-card__actions :global(.pl-btn) {
+      flex: 0 0 auto;
+      min-width: 0;
+    }
+
+    .download-card__spec {
+      grid-template-columns: 150px 1fr;
+      margin-bottom: var(--pl-space-xs);
+      font-size: 14px;
+      line-height: 20px;
+    }
+  }
+</style>

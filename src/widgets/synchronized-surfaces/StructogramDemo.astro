@@ -1,0 +1,90 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+const temperature = t('demo.variableTemperature');
+const readings = t('demo.variableReadings');
+---
+
+<div class="structogram-demo">
+  <div class="structogram-demo__box">
+    <p class="structogram-demo__header">¿{temperature} &gt; 24?</p>
+    <div class="structogram-demo__body">
+      <div class="structogram-demo__gutter"></div>
+      <div class="structogram-demo__steps">
+        <p class="structogram-demo__step structogram-demo__step--active">
+          {temperature} &lt;- {temperature} - 3
+        </p>
+        <p class="structogram-demo__step">
+          {readings} &lt;- {readings} + 1
+        </p>
+        <p class="structogram-demo__step">
+          {t('lexicon.write')} "{t('demo.stringReading')}", {readings}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .structogram-demo {
+    display: flex;
+    justify-content: center;
+    padding: var(--pl-space-sm);
+    border: 1px solid var(--pl-line-soft);
+    border-radius: var(--pl-radius-control);
+    background: var(--pl-canvas);
+  }
+
+  .structogram-demo__box {
+    width: 100%;
+    border: 1px solid var(--pl-line-strong);
+    background: var(--pl-raised);
+    font-size: 11px;
+    line-height: 15px;
+    color: var(--pl-ink);
+    text-align: center;
+  }
+
+  .structogram-demo__header {
+    margin: 0;
+    padding: var(--pl-space-xs);
+  }
+
+  .structogram-demo__body {
+    display: flex;
+    border-top: 1px solid var(--pl-line-strong);
+  }
+
+  .structogram-demo__gutter {
+    flex: none;
+    width: 14px;
+    border-right: 1px solid var(--pl-line-strong);
+    background: var(--pl-surface);
+  }
+
+  .structogram-demo__steps {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .structogram-demo__step {
+    margin: 0;
+    padding: var(--pl-space-xs);
+  }
+
+  .structogram-demo__step + .structogram-demo__step {
+    border-top: 1px solid var(--pl-line-strong);
+  }
+
+  .structogram-demo__step--active {
+    outline: 2px solid var(--pl-focus);
+    outline-offset: -1px;
+  }
+</style>

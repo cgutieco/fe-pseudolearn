@@ -1,0 +1,68 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { CURRICULUM_METRICS } from '@entities/learning-module/model/metrics';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t, formatNumber } = useTranslations(locale);
+---
+
+<dl class="metrics">
+  {CURRICULUM_METRICS.map((metric) => (
+    <div class="metrics__item">
+      <dt class="metrics__value pl-mono">{formatNumber(metric.value)}</dt>
+      <dd class="metrics__label">{t(metric.labelKey)}</dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--pl-space-lg) var(--pl-space-md);
+    margin: var(--pl-space-xl) 0 0;
+    padding-top: 28px;
+    border-top: 1px solid var(--pl-on-field-line);
+  }
+
+  .metrics__value {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--pl-on-field);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .metrics__label {
+    margin: var(--pl-space-2xs) 0 0;
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--pl-on-field-2);
+  }
+
+  @media (min-width: 900px) {
+    .metrics {
+      display: flex;
+      gap: 0;
+      margin-top: 40px;
+      padding-top: var(--pl-space-xl);
+    }
+
+    .metrics__item {
+      flex: 1;
+    }
+
+    .metrics__value {
+      font-size: 34px;
+    }
+
+    .metrics__label {
+      font-size: 14px;
+    }
+  }
+</style>

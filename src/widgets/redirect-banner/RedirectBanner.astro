@@ -1,0 +1,82 @@
+---
+import { Icon } from '@shared/ui/icon';
+
+export interface Props {
+  title: string;
+  text: string;
+  actionLabel: string;
+  href: string;
+}
+
+const { title, text, actionLabel, href } = Astro.props;
+---
+
+<section class="pl-container redirect">
+  <div class="pl-card redirect__box">
+    <div class="redirect__text">
+      <h2 class="redirect__title">{title}</h2>
+      <p class="redirect__description">{text}</p>
+    </div>
+    <a class="pl-btn pl-btn--ghost pl-btn--sm redirect__action" href={href}>
+      <span>{actionLabel}</span>
+      <Icon name="arrowRight" size={16} strokeWidth={1.8} />
+    </a>
+  </div>
+</section>
+
+<style>
+  .redirect {
+    padding-top: 40px;
+    padding-bottom: 56px;
+  }
+
+  .redirect__box {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pl-space-md);
+    padding: 22px 18px;
+  }
+
+  .redirect__title {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .redirect__description {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--pl-ink-2);
+  }
+
+  .redirect__action {
+    justify-content: center;
+  }
+
+  @media (min-width: 900px) {
+    .redirect {
+      padding-top: 64px;
+      padding-bottom: var(--pl-space-4xl);
+    }
+
+    .redirect__box {
+      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+      padding: 26px 30px;
+    }
+
+    .redirect__text {
+      flex: 1;
+    }
+
+    .redirect__title {
+      font-size: 19px;
+    }
+
+    .redirect__action {
+      flex: none;
+    }
+  }
+</style>

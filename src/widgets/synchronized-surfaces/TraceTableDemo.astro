@@ -1,0 +1,109 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+
+interface TraceRow {
+  readonly step: string;
+  readonly line: string;
+  readonly temperature: string;
+  readonly readings: string;
+  readonly changed?: 'temperature' | 'readings';
+  readonly active?: boolean;
+}
+
+const ROWS: readonly TraceRow[] = [
+  { step: '2', line: '3', temperature: '-', readings: '-' },
+  { step: '3', line: '4', temperature: '30', readings: '-', changed: 'temperature' },
+  { step: '4', line: '5', temperature: '30', readings: '0', changed: 'readings' },
+  { step: '5', line: '6', temperature: '30', readings: '0' },
+  { step: '6', line: '7', temperature: '27', readings: '0', changed: 'temperature', active: true },
+];
+---
+
+<div class="trace-demo" tabindex="0" role="group" aria-label={t('home.surfaces.trace.tableLabel')}>
+  <table class="trace-demo__table">
+    <thead>
+      <tr>
+        <th scope="col">{t('home.surfaces.trace.columnStep')}</th>
+        <th scope="col" class="trace-demo__divider">
+          {t('home.surfaces.trace.columnLine')}
+        </th>
+        <th scope="col" class="trace-demo__variable pl-mono">
+          {t('demo.variableTemperature')}
+        </th>
+        <th scope="col" class="trace-demo__variable pl-mono">
+          {t('demo.variableReadings')}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {ROWS.map((row) => (
+        <tr class:list={[row.active && 'trace-demo__row--active']}>
+          <td class="pl-mono">{row.step}</td>
+          <td class="pl-mono trace-demo__divider">{row.line}</td>
+          <td class:list={['pl-mono', row.changed === 'temperature' && 'trace-demo__cell--changed']}>
+            {row.temperature}
+          </td>
+          <td class:list={['pl-mono', row.changed === 'readings' && 'trace-demo__cell--changed']}>
+            {row.readings}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .trace-demo {
+    border: 1px solid var(--pl-line-soft);
+    border-radius: var(--pl-radius-control);
+    overflow-x: auto;
+  }
+
+  .trace-demo__table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .trace-demo__table th {
+    padding: 9px 5px;
+    text-align: left;
+    background: var(--pl-sunken);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    color: var(--pl-ink);
+    white-space: nowrap;
+  }
+
+  .trace-demo__variable {
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
+  .trace-demo__table td {
+    padding: 6px 5px;
+    font-size: 11px;
+    color: var(--pl-ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .trace-demo__divider {
+    border-right: 1px solid var(--pl-line-soft);
+  }
+
+  .trace-demo__row--active td {
+    background: var(--pl-brand-tint);
+  }
+
+  .trace-demo__table td.trace-demo__cell--changed {
+    color: var(--pl-brand);
+  }
+</style>

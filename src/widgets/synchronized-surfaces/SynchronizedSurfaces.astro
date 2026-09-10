@@ -1,0 +1,147 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import CodeDemo from './CodeDemo.astro';
+import FlowchartDemo from './FlowchartDemo.astro';
+import StructogramDemo from './StructogramDemo.astro';
+import TraceTableDemo from './TraceTableDemo.astro';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+
+const SURFACES = ['code', 'flowchart', 'structogram', 'trace'] as const;
+---
+
+<section class="surfaces">
+  <div class="pl-container">
+    <p class="pl-overline pl-overline--brand">{t('home.surfaces.overline')}</p>
+    <h2 class="pl-section-title surfaces__title">{t('home.surfaces.title')}</h2>
+    <p class="pl-lede surfaces__lead">{t('home.surfaces.lead')}</p>
+
+    <div class="surfaces__grid">
+      {SURFACES.map((surface, index) => (
+        <article class="surfaces__card">
+          <p class="pl-overline pl-overline--brand surfaces__index">
+            {String(index + 1).padStart(2, '0')} · {t(`home.surfaces.${surface}.title`)}
+          </p>
+          <h3 class="surfaces__subtitle">{t(`home.surfaces.${surface}.subtitle`)}</h3>
+          <div class="surfaces__preview">
+            {surface === 'code' && <CodeDemo locale={locale} />}
+            {surface === 'flowchart' && <FlowchartDemo locale={locale} />}
+            {surface === 'structogram' && <StructogramDemo locale={locale} />}
+            {surface === 'trace' && <TraceTableDemo locale={locale} />}
+          </div>
+          <p class="surfaces__caption">{t(`home.surfaces.${surface}.caption`)}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .surfaces {
+    padding-top: 64px;
+  }
+
+  .surfaces__title {
+    margin-top: 14px;
+    max-width: 820px;
+  }
+
+  .surfaces__lead {
+    margin-top: var(--pl-space-md);
+    max-width: 700px;
+  }
+
+  .surfaces__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--pl-space-md);
+    margin-top: 28px;
+  }
+
+  .surfaces__card {
+    padding: 18px var(--pl-space-md);
+    border: 1px solid var(--pl-line);
+    border-radius: var(--pl-radius-card);
+    background: var(--pl-surface);
+  }
+
+  .surfaces__index {
+    display: block;
+    margin-bottom: var(--pl-space-2xs);
+  }
+
+  .surfaces__subtitle {
+    margin: 0 0 14px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .surfaces__caption {
+    margin-top: var(--pl-space-sm);
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--pl-ink-2);
+  }
+
+  @media (min-width: 900px) {
+    .surfaces {
+      padding-top: 104px;
+    }
+
+    .surfaces__title {
+      margin-top: 20px;
+    }
+
+    .surfaces__lead {
+      margin-top: 20px;
+    }
+
+    .surfaces__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+      margin-top: var(--pl-space-2xl);
+      border: 1px solid var(--pl-line);
+      border-radius: var(--pl-radius-card);
+      overflow: hidden;
+      background: var(--pl-surface);
+      box-shadow: var(--pl-shadow-1);
+    }
+
+    .surfaces__card {
+      border: 0;
+      border-radius: 0;
+      padding: 22px 20px;
+    }
+
+    .surfaces__card + .surfaces__card {
+      border-left: 1px solid var(--pl-line);
+    }
+
+    .surfaces__subtitle {
+      margin-bottom: var(--pl-space-md);
+      font-size: 14px;
+    }
+
+    .surfaces__preview {
+      display: flex;
+      align-items: center;
+      min-height: 208px;
+    }
+
+    .surfaces__preview > * {
+      width: 100%;
+    }
+
+    .surfaces__caption {
+      margin-top: 14px;
+      font-size: 13px;
+      line-height: 20px;
+    }
+  }
+</style>

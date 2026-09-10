@@ -1,0 +1,8 @@
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true
+minimumReleaseAgeExclude:
+  - astro@7.3.2
+  - '@types/node@22.20.2'
+  - lint-staged@17.5.1

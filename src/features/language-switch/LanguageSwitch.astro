@@ -1,0 +1,111 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import { LOCALES, type Locale } from '@shared/i18n/locales';
+import { localizePath } from '@shared/i18n/routes';
+
+export interface Props {
+  locale: Locale;
+  path: string;
+  variant?: 'field' | 'surface';
+}
+
+const { locale, path, variant = 'field' } = Astro.props;
+const { t } = useTranslations(locale);
+const labels: Record<Locale, string> = { es: t('language.spanish'), en: t('language.english') };
+const codes: Record<Locale, string> = { es: t('language.spanishCode'), en: t('language.englishCode') };
+---
+
+<nav class:list={['language-switch', `language-switch--${variant}`]} aria-label={t('language.groupLabel')}>
+  {LOCALES.map((option) => (
+    <a
+      class="language-switch__option pl-mono"
+      href={localizePath(path, option)}
+      hreflang={option}
+      lang={option}
+      data-language-choice={option}
+      aria-current={option === locale ? 'true' : undefined}
+    >
+      <span class="language-switch__label">{labels[option]}</span>
+      <span class="language-switch__code">{codes[option]}</span>
+    </a>
+  ))}
+</nav>
+
+<style>
+  .language-switch {
+    display: inline-flex;
+    align-items: center;
+    height: 34px;
+    border: 1px solid var(--pl-on-field-line-mid);
+    border-radius: var(--pl-radius-control);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .language-switch__option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 var(--pl-space-sm);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--pl-on-field-2);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .language-switch__option[aria-current='true'] {
+    background: var(--pl-on-field-3);
+    color: var(--pl-on-field-ink);
+  }
+
+  .language-switch__option:hover:not([aria-current='true']) {
+    background: var(--pl-on-field-hover);
+    color: var(--pl-on-field);
+  }
+
+  .language-switch__label {
+    display: none;
+  }
+
+  .language-switch__code {
+    display: inline;
+  }
+
+  @media (min-width: 1280px) {
+    .language-switch__label {
+      display: inline;
+    }
+
+    .language-switch__code {
+      display: none;
+    }
+  }
+
+  .language-switch--surface {
+    border-color: var(--pl-line);
+  }
+
+  .language-switch--surface .language-switch__option {
+    color: var(--pl-ink-3);
+  }
+
+  .language-switch--surface .language-switch__option[aria-current='true'] {
+    background: var(--pl-sunken);
+    color: var(--pl-ink);
+  }
+
+  .language-switch--surface .language-switch__option:hover:not([aria-current='true']) {
+    background: var(--pl-line-soft);
+    color: var(--pl-ink);
+  }
+
+  .language-switch--surface .language-switch__label {
+    display: inline;
+  }
+
+  .language-switch--surface .language-switch__code {
+    display: none;
+  }
+</style>

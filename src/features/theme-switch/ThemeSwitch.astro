@@ -1,0 +1,117 @@
+---
+import { Icon } from '@shared/ui/icon';
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+
+export interface Props {
+  locale: Locale;
+  compact?: boolean;
+  variant?: 'field' | 'surface';
+}
+
+const { locale, compact = false, variant = 'field' } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<div
+  class:list={['theme-switch', `theme-switch--${variant}`, { 'theme-switch--compact': compact }]}
+  role="group"
+  aria-label={t('header.themeGroupLabel')}
+>
+  <button
+    type="button"
+    class="theme-switch__option"
+    data-theme-choice="light"
+    aria-label={t('header.themeLight')}
+  >
+    <Icon name="sun" size={15} strokeWidth={1.6} class="theme-switch__icon" />
+    <span class="theme-switch__label">{t('header.themeLight')}</span>
+  </button>
+  <button
+    type="button"
+    class="theme-switch__option"
+    data-theme-choice="dark"
+    aria-label={t('header.themeDark')}
+  >
+    <Icon name="moon" size={15} strokeWidth={1.6} class="theme-switch__icon" />
+    <span class="theme-switch__label">{t('header.themeDark')}</span>
+  </button>
+</div>
+
+<style>
+  .theme-switch {
+    display: flex;
+    align-items: center;
+    height: 34px;
+    border: 1px solid var(--pl-on-field-line-mid);
+    border-radius: var(--pl-radius-control);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .theme-switch__option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    padding: 0 var(--pl-space-sm);
+    border: 0;
+    background: transparent;
+    color: var(--pl-on-field-2);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .theme-switch__option[aria-pressed='true'] {
+    background: var(--pl-on-field-3);
+    color: var(--pl-on-field-ink);
+  }
+
+  .theme-switch__option:hover:not([aria-pressed='true']) {
+    background: var(--pl-on-field-hover);
+    color: var(--pl-on-field);
+  }
+
+  .theme-switch :global(.theme-switch__icon) {
+    flex: none;
+  }
+
+  .theme-switch__label {
+    display: none;
+  }
+
+  @media (min-width: 1280px) {
+    .theme-switch__label {
+      display: inline;
+    }
+  }
+
+  .theme-switch--compact :global(.theme-switch__icon) {
+    display: none;
+  }
+
+  .theme-switch--compact .theme-switch__label {
+    display: inline;
+  }
+
+  .theme-switch--surface {
+    border-color: var(--pl-line);
+  }
+
+  .theme-switch--surface .theme-switch__option {
+    color: var(--pl-ink-3);
+  }
+
+  .theme-switch--surface .theme-switch__option[aria-pressed='true'] {
+    background: var(--pl-sunken);
+    color: var(--pl-ink);
+  }
+
+  .theme-switch--surface .theme-switch__option:hover:not([aria-pressed='true']) {
+    background: var(--pl-line-soft);
+    color: var(--pl-ink);
+  }
+</style>

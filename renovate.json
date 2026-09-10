@@ -1,0 +1,23 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":semanticCommits"],
+  "labels": ["dependencies"],
+  "schedule": ["before 6am on monday"],
+  "packageRules": [
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "herramientas de desarrollo",
+      "automerge": false
+    },
+    {
+      "matchPackageNames": ["astro", "@astrojs/cloudflare", "@astrojs/check"],
+      "groupName": "astro"
+    },
+    {
+      "matchPackageNames": ["@playwright/test", "@axe-core/playwright"],
+      "groupName": "playwright",
+      "description": "La imagen del contenedor de CI en ci.yml debe subir a la vez"
+    }
+  ]
+}

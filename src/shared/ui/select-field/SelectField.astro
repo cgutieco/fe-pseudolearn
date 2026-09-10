@@ -1,0 +1,62 @@
+---
+import { Icon } from '@shared/ui/icon';
+
+export interface Props {
+  id: string;
+  name: string;
+  label?: string;
+}
+
+const { id, name, label } = Astro.props;
+const triggerId = `${id}-trigger`;
+const menuId = `${id}-menu`;
+const slotHtml = await Astro.slots.render('default');
+
+const menuHtml = slotHtml
+  .replace(
+    /<optgroup\b[^>]*label=["']([^"']*)["'][^>]*>/g,
+    '<div class="pl-select__group" role="group" aria-label="$1"><div class="pl-select__group-label">$1</div>',
+  )
+  .replace(/<\/optgroup>/g, '</div>')
+  .replace(/<option\b([^>]*)>([\s\S]*?)<\/option>/g, (_, attrs: string, text: string) => {
+    const valMatch = attrs.match(/value=["']([^"']*)["']/);
+    const val = valMatch ? valMatch[1] : text.trim();
+    const isSelected = /\bselected\b/.test(attrs);
+    return `<div class="pl-select__option" role="option" data-value="${val}" aria-selected="${isSelected}" tabindex="-1"><span class="pl-select__option-text">${text}</span></div>`;
+  });
+
+const firstOptionMatch = slotHtml.match(/<option\b[^>]*>([\s\S]*?)<\/option>/);
+const initialText = firstOptionMatch?.[1]?.trim() ?? '';
+---
+
+<div class="pl-select" data-custom-select>
+  <select
+    id={id}
+    name={name}
+    class="pl-form-control pl-form-control--select pl-select__native"
+    aria-label={label}
+    set:html={slotHtml}
+  />
+  <button
+    type="button"
+    id={triggerId}
+    class="pl-form-control pl-select__trigger"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-controls={menuId}
+    aria-label={label}
+    hidden
+  >
+    <span class="pl-select__trigger-text">{initialText}</span>
+  </button>
+  <Icon name="chevronDown" size={16} strokeWidth={1.8} class="pl-select__chevron" />
+  <div
+    id={menuId}
+    class="pl-select__menu"
+    role="listbox"
+    aria-labelledby={triggerId}
+    tabindex="-1"
+    hidden
+    set:html={menuHtml}
+  />
+</div>

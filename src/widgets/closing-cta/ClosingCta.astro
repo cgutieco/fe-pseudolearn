@@ -1,0 +1,98 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { Icon } from '@shared/ui/icon';
+import { ANCHORS } from '@shared/config/site';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<section class="closing pl-field">
+  <div class="pl-container closing__row">
+    <div class="closing__text">
+      <h2 class="pl-section-title closing__title">{t('home.closing.title')}</h2>
+      <p class="pl-lede pl-lede--field closing__lead">{t('home.closing.lead')}</p>
+    </div>
+    <div class="closing__action">
+      <a class="pl-btn pl-btn--on-field pl-btn--lg pl-btn--block" href={`#${ANCHORS.downloads}`}>
+        <Icon name="download" size={20} />
+        <span>{t('home.hero.ctaPrimary')}</span>
+      </a>
+      <p class="closing__note pl-mono">{t('home.closing.note')}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .closing {
+    margin-top: 64px;
+  }
+
+  .closing__row {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .closing__title {
+    color: var(--pl-on-field);
+  }
+
+  .closing__lead {
+    margin-top: var(--pl-space-md);
+  }
+
+  .closing__action {
+    margin-top: var(--pl-space-lg);
+  }
+
+  .closing__note {
+    margin-top: var(--pl-space-sm);
+    font-size: 12px;
+    color: var(--pl-on-field-2);
+    opacity: 0.8;
+  }
+
+  @media (min-width: 900px) {
+    .closing {
+      margin-top: 104px;
+    }
+
+    .closing__row {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+      padding-top: var(--pl-space-4xl);
+      padding-bottom: var(--pl-space-4xl);
+    }
+
+    .closing__text {
+      flex: 1;
+    }
+
+    .closing__title {
+      max-width: 620px;
+      font-size: 40px;
+      letter-spacing: -0.024em;
+    }
+
+    .closing__lead {
+      margin-top: 20px;
+      max-width: 560px;
+      font-size: 17px;
+    }
+
+    .closing__action {
+      flex: none;
+      margin-top: 0;
+    }
+
+    .closing__action :global(.pl-btn) {
+      width: auto;
+    }
+  }
+</style>

@@ -1,0 +1,79 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { FREQUENCIES } from '@entities/contact-request/model/contact-request';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+const DEFAULT_FREQUENCY = 'sometimes';
+---
+
+<div class="pl-branch pl-branch--feature">
+  <p class="pl-overline pl-overline--brand pl-branch__label">{t('contact.branch.feature.label')}</p>
+  <p class="pl-branch__intro">{t('contact.branch.feature.intro')}</p>
+  <div class="pl-form-field">
+    <label class="pl-form-field__label" for="intent-field">
+      {t('contact.branch.feature.intentLabel')}
+    </label>
+    <input
+      type="text"
+      id="intent-field"
+      name="featureIntent"
+      class="pl-form-control"
+      placeholder={t('contact.branch.feature.intentPlaceholder')}
+    />
+  </div>
+  <div class="pl-form-field">
+    <label class="pl-form-field__label" for="workaround-field">
+      {t('contact.branch.feature.workaroundLabel')}
+    </label>
+    <input
+      type="text"
+      id="workaround-field"
+      name="currentWorkaround"
+      class="pl-form-control"
+      placeholder={t('contact.branch.feature.workaroundPlaceholder')}
+      aria-describedby="workaround-help"
+    />
+    <span class="pl-form-field__help" id="workaround-help">
+      {t('contact.branch.feature.workaroundHelp')}
+    </span>
+  </div>
+  <fieldset class="pl-form-field feature-branch__frequency">
+    <legend class="pl-form-field__label">{t('contact.branch.feature.frequencyLabel')}</legend>
+    <div class="pl-options">
+      {FREQUENCIES.map((frequency) => (
+        <div class="pl-option">
+          <input
+            type="radio"
+            name="frequency"
+            id={`frequency-${frequency}`}
+            value={frequency}
+            checked={frequency === DEFAULT_FREQUENCY}
+            class="pl-visually-hidden pl-option__input"
+          />
+          <label class="pl-option__pill" for={`frequency-${frequency}`}>
+            {t(`contact.frequency.${frequency}`)}
+          </label>
+        </div>
+      ))}
+    </div>
+  </fieldset>
+</div>
+
+<style>
+  .feature-branch__frequency {
+    margin: var(--pl-space-md) 0 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .feature-branch__frequency legend {
+    padding: 0;
+    margin-bottom: 7px;
+  }
+</style>

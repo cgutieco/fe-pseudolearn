@@ -1,0 +1,174 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { BrandMark } from '@shared/ui/brand-mark';
+import ThemeSwitch from '@features/theme-switch/ThemeSwitch.astro';
+import LanguageSwitch from '@features/language-switch/LanguageSwitch.astro';
+import MobileMenu from './MobileMenu.astro';
+import { buildNavigation } from './navigation';
+
+export interface Props {
+  locale: Locale;
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+const { t } = useTranslations(locale);
+const links = buildNavigation(locale);
+const downloadsHref = links.at(-3)?.href ?? '/';
+---
+
+<header class="site-header pl-field">
+  <div class="pl-container site-header__row">
+    <a class="site-header__brand" href={links[0]?.homeHref}>
+      <BrandMark size={26} class="site-header__symbol" />
+      <span class="site-header__name">{t('common.brandName')}</span>
+    </a>
+
+    <nav class="site-header__nav" aria-label={t('nav.ariaLabel')}>
+      {links.map((link) => (
+        <a class="site-header__link" href={link.href} aria-current={path === link.path ? 'page' : undefined}>
+          {t(link.labelKey)}
+        </a>
+      ))}
+    </nav>
+
+    <div class="site-header__actions">
+      <ThemeSwitch locale={locale} />
+      <LanguageSwitch locale={locale} path={path} />
+      <a class="site-header__cta" href={downloadsHref}>
+        {t('header.cta')}
+      </a>
+    </div>
+
+    <MobileMenu locale={locale} path={path} links={links} />
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--pl-on-field-line);
+  }
+
+  .site-header__row {
+    display: flex;
+    align-items: center;
+    gap: var(--pl-space-sm);
+    height: 60px;
+  }
+
+  .site-header__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: auto;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .site-header :global(.site-header__symbol) {
+    flex: none;
+    color: var(--pl-on-field-3);
+  }
+
+  .site-header__name {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.022em;
+    color: var(--pl-on-field);
+    white-space: nowrap;
+  }
+
+  .site-header__nav {
+    display: none;
+  }
+
+  .site-header__link {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--pl-on-field-2);
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 4px 6px;
+    border-radius: var(--pl-radius-sm);
+  }
+
+  .site-header__link:hover,
+  .site-header__link[aria-current='page'] {
+    color: var(--pl-on-field);
+  }
+
+  .site-header__actions {
+    display: none;
+  }
+
+  .site-header__cta {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: var(--pl-radius-control);
+    background: var(--pl-on-field-3);
+    color: var(--pl-on-field-ink);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .site-header__cta:hover {
+    background: var(--pl-on-field-2);
+    color: var(--pl-on-field-ink);
+  }
+
+  @media (min-width: 1100px) {
+    .site-header__row {
+      gap: var(--pl-space-md);
+      height: 76px;
+    }
+
+    .site-header__brand {
+      margin-right: 0;
+    }
+
+    .site-header__name {
+      font-size: 19px;
+    }
+
+    .site-header__nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-left: var(--pl-space-xl);
+      flex: 1;
+    }
+
+    .site-header__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--pl-space-xs);
+      flex-shrink: 0;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .site-header__row {
+      gap: var(--pl-space-xl);
+    }
+
+    .site-header__nav {
+      gap: 26px;
+      margin-left: var(--pl-space-2xl);
+    }
+
+    .site-header__actions {
+      gap: var(--pl-space-sm);
+    }
+
+    .site-header__cta {
+      padding: 0 18px;
+    }
+  }
+</style>

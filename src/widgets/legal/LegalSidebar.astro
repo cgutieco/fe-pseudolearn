@@ -1,0 +1,155 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { ROUTES, localizePath } from '@shared/i18n/routes';
+import { SITE } from '@shared/config/site';
+import { Icon } from '@shared/ui/icon';
+import type { LegalDocumentMeta, LegalSection } from '@entities/legal/model/legal-document';
+
+export interface Props {
+  locale: Locale;
+  meta: LegalDocumentMeta;
+  sections: readonly LegalSection[];
+}
+
+const { locale, meta, sections } = Astro.props;
+const { t } = useTranslations(locale);
+const contactHref = localizePath(ROUTES.contact, locale);
+const sisterHref = localizePath(meta.sisterRoute, locale);
+---
+
+<aside class="legal-sidebar">
+  <div class="pl-card legal-sidebar__card">
+    <p class="pl-overline pl-overline--brand legal-sidebar__label">{t(meta.tocTitleKey)}</p>
+    <nav aria-label={t(meta.tocTitleKey)}>
+      <ol class="legal-sidebar__toc">
+        {sections.map((section) => (
+          <li>
+            <a class="legal-sidebar__toc-link" href={`#${section.id}`}>
+              <span class="pl-mono legal-sidebar__toc-num">{section.number}</span>
+              <span class="legal-sidebar__toc-title">{t(section.titleKey)}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  </div>
+
+  <div class="pl-card legal-sidebar__card">
+    <p class="pl-overline legal-sidebar__label">{t(meta.sisterLabelKey)}</p>
+    <a class="pl-link-arrow legal-sidebar__sister-link" href={sisterHref}>
+      <span>{t(meta.sisterTitleKey)}</span>
+      <Icon name="arrowRight" size={15} strokeWidth={1.8} />
+    </a>
+  </div>
+
+  <div class="pl-card pl-card--tint legal-sidebar__card">
+    <p class="pl-overline pl-overline--brand legal-sidebar__label">{t(meta.supportTitleKey)}</p>
+    <p class="legal-sidebar__text">{t(meta.supportTextKey)}</p>
+    <a class="pl-mono legal-sidebar__email" href={`mailto:${SITE.supportEmail}`}>
+      {SITE.supportEmail}
+    </a>
+    <a class="pl-link-arrow legal-sidebar__contact-link" href={contactHref}>
+      <span>{t('nav.contact')}</span>
+      <Icon name="arrowRight" size={15} strokeWidth={1.8} />
+    </a>
+  </div>
+</aside>
+
+<style>
+  .legal-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pl-space-md);
+  }
+
+  .legal-sidebar__card {
+    padding: var(--pl-space-md);
+  }
+
+  .legal-sidebar__label {
+    margin: 0 0 var(--pl-space-sm);
+  }
+
+  .legal-sidebar__toc {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .legal-sidebar__toc-link {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--pl-ink-2);
+    text-decoration: none;
+  }
+
+  .legal-sidebar__toc-link:hover {
+    color: var(--pl-brand);
+  }
+
+  .legal-sidebar__toc-num {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--pl-brand);
+    flex: none;
+  }
+
+  .legal-sidebar__toc-title {
+    flex: 1;
+  }
+
+  .legal-sidebar__sister-link {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .legal-sidebar__text {
+    margin: 0 0 var(--pl-space-xs);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--pl-ink-2);
+  }
+
+  .legal-sidebar__email {
+    display: block;
+    margin-bottom: var(--pl-space-xs);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--pl-ink);
+    text-decoration: none;
+  }
+
+  .legal-sidebar__email:hover {
+    color: var(--pl-brand);
+  }
+
+  .legal-sidebar__contact-link {
+    font-size: 13px;
+  }
+
+  @media (min-width: 900px) {
+    .legal-sidebar {
+      position: sticky;
+      top: 96px;
+      width: 320px;
+      flex: none;
+    }
+
+    .legal-sidebar__card {
+      padding: var(--pl-space-lg);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .legal-sidebar {
+      width: 340px;
+    }
+  }
+</style>

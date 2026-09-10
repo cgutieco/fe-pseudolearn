@@ -1,0 +1,152 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import type { LegalDocumentMeta } from '@entities/legal/model/legal-document';
+import { Icon } from '@shared/ui/icon';
+
+export interface Props {
+  locale: Locale;
+  meta: LegalDocumentMeta;
+}
+
+const { locale, meta } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<header class="pl-card pl-card--tint legal-summary">
+  <div class="legal-summary__meta">
+    <span class="pl-mono legal-summary__date">{t(meta.lastUpdatedKey)}</span>
+    <span class="legal-summary__badge">{t(meta.versionKey)}</span>
+  </div>
+
+  <h2 class="legal-summary__title">{t(meta.summaryTitleKey)}</h2>
+  <p class="legal-summary__lead">{t(meta.summaryLeadKey)}</p>
+
+  <div class="legal-summary__pillars">
+    {meta.pillars.map((pillar) => (
+      <div class="legal-summary__pillar">
+        <div class="legal-summary__pillar-header">
+          <span class="legal-summary__pillar-icon" aria-hidden="true">
+            <Icon name="check" size={14} strokeWidth={2.4} />
+          </span>
+          <h3 class="legal-summary__pillar-title">{t(pillar.titleKey)}</h3>
+        </div>
+        <p class="legal-summary__pillar-text">{t(pillar.textKey)}</p>
+      </div>
+    ))}
+  </div>
+</header>
+
+<style>
+  .legal-summary {
+    padding: var(--pl-space-lg);
+    margin-bottom: var(--pl-space-2xl);
+  }
+
+  .legal-summary__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--pl-space-xs) var(--pl-space-sm);
+    margin-bottom: var(--pl-space-sm);
+  }
+
+  .legal-summary__date {
+    font-size: 12px;
+    color: var(--pl-ink-3);
+  }
+
+  .legal-summary__badge {
+    display: inline-flex;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--pl-font-code);
+    color: var(--pl-brand);
+    background: var(--pl-brand-tint);
+    border-radius: var(--pl-radius-pill);
+  }
+
+  .legal-summary__title {
+    margin: 0 0 var(--pl-space-xs);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--pl-ink);
+  }
+
+  .legal-summary__lead {
+    margin: 0 0 var(--pl-space-lg);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--pl-ink-2);
+  }
+
+  .legal-summary__pillars {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--pl-space-md);
+    padding-top: var(--pl-space-md);
+    border-top: 1px solid var(--pl-line-soft);
+  }
+
+  .legal-summary__pillar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .legal-summary__pillar-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .legal-summary__pillar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: var(--pl-radius-pill);
+    background: var(--pl-brand-tint);
+    color: var(--pl-brand);
+    flex: none;
+  }
+
+  .legal-summary__pillar-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--pl-ink);
+  }
+
+  .legal-summary__pillar-text {
+    margin: 0;
+    padding-left: 28px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--pl-ink-2);
+  }
+
+  @media (min-width: 600px) {
+    .legal-summary__pillars {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--pl-space-lg);
+    }
+
+    .legal-summary__pillar-text {
+      padding-left: 0;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .legal-summary {
+      padding: var(--pl-space-xl);
+      margin-bottom: var(--pl-space-3xl);
+    }
+
+    .legal-summary__title {
+      font-size: 22px;
+    }
+  }
+</style>

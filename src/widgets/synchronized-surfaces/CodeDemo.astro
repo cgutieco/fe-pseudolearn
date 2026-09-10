@@ -1,0 +1,98 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+const temperature = t('demo.variableTemperature');
+const readings = t('demo.variableReadings');
+const LINES = [4, 5, 6, 7, 8, 9, 10];
+const ACTIVE_LINE = 7;
+---
+
+<div class="code-demo">
+  <ol class="code-demo__gutter pl-mono" aria-hidden="true">
+    {LINES.map((line) => (
+      <li class:list={[line === ACTIVE_LINE && 'code-demo__gutter-line--active']}>{line}</li>
+    ))}
+  </ol>
+  <pre
+    class="code-demo__code pl-mono"
+    tabindex="0"
+  ><span class="code-demo__id">{temperature}</span> &lt;- <span class="code-demo__num">30</span>;
+<span class="code-demo__id">{readings}</span> &lt;- <span class="code-demo__num">0</span>;
+<span class="code-demo__kw">{t('lexicon.while')}</span> <span class="code-demo__id">{temperature}</span> &gt; <span class="code-demo__num">24</span> <span class="code-demo__kw">{t('lexicon.do')}</span>
+    <span class="code-demo__exec"><span class="code-demo__id">{temperature}</span> &lt;- <span class="code-demo__id">{temperature}</span> - <span class="code-demo__num">3</span></span>;
+    <span class="code-demo__id">{readings}</span> &lt;- <span class="code-demo__id">{readings}</span> + <span class="code-demo__num">1</span>;
+    <span class="code-demo__kw">{t('lexicon.write')}</span> <span class="code-demo__str">"{t('demo.stringReading')}"</span>, <span class="code-demo__id">{readings}</span>;
+<span class="code-demo__kw">{t('lexicon.endWhile')}</span></pre>
+</div>
+
+<style>
+  .code-demo {
+    display: flex;
+    overflow: hidden;
+    border: 1px solid var(--pl-line-soft);
+    border-radius: var(--pl-radius-control);
+    background: var(--pl-surface);
+  }
+
+  .code-demo__gutter {
+    flex: none;
+    width: 26px;
+    margin: 0;
+    padding: var(--pl-space-xs) 0;
+    border-right: 1px solid var(--pl-line-soft);
+    background: var(--pl-sunken);
+  }
+
+  .code-demo__gutter li {
+    padding-right: 6px;
+    text-align: right;
+    font-size: 10px;
+    line-height: 16px;
+    color: var(--pl-ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .code-demo__gutter-line--active {
+    background: var(--pl-brand-tint);
+    color: var(--pl-ink);
+  }
+
+  .code-demo__code {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    padding: var(--pl-space-xs) var(--pl-space-sm);
+    overflow-x: auto;
+    font-size: 10px;
+    line-height: 16px;
+    color: var(--pl-syn-ink);
+  }
+
+  .code-demo__kw {
+    color: var(--pl-syn-struct);
+  }
+
+  .code-demo__id {
+    color: var(--pl-syn-id);
+  }
+
+  .code-demo__num {
+    color: var(--pl-syn-num);
+  }
+
+  .code-demo__str {
+    color: var(--pl-syn-str);
+  }
+
+  .code-demo__exec {
+    padding: 1.5px 0;
+    background: var(--pl-brand-tint);
+  }
+</style>

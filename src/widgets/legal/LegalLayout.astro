@@ -1,0 +1,49 @@
+---
+export interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={['pl-container', 'legal-layout', className]}>
+  <div class="legal-layout__sidebar">
+    <slot name="sidebar" />
+  </div>
+  <div class="legal-layout__content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .legal-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pl-space-xl);
+    padding-top: var(--pl-space-xl);
+    padding-bottom: var(--pl-space-3xl);
+  }
+
+  .legal-layout__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  @media (min-width: 900px) {
+    .legal-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      align-items: flex-start;
+      gap: var(--pl-space-2xl);
+      padding-top: var(--pl-space-3xl);
+      padding-bottom: var(--pl-space-4xl);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .legal-layout {
+      grid-template-columns: 340px 1fr;
+      gap: 60px;
+    }
+  }
+</style>

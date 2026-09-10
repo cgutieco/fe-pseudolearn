@@ -1,0 +1,39 @@
+---
+import BaseLayout from '@app/layouts/BaseLayout.astro';
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { ROUTES, localizePath } from '@shared/i18n/routes';
+import PageHero from '@widgets/page-hero/PageHero.astro';
+import CurrentRelease from '@widgets/current-release/CurrentRelease.astro';
+import ReleaseHistory from '@widgets/release-history/ReleaseHistory.astro';
+import RedirectBanner from '@widgets/redirect-banner/RedirectBanner.astro';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  path={ROUTES.versions}
+  title={t('versions.seoTitle')}
+  description={t('versions.seoDescription')}
+>
+  <PageHero
+    overline={t('versions.hero.overline')}
+    title={t('versions.hero.title')}
+    lead={t('versions.hero.lead')}
+  />
+  <CurrentRelease locale={locale} />
+  <ReleaseHistory locale={locale} />
+
+  <RedirectBanner
+    title={t('versions.report.title')}
+    text={t('versions.report.text')}
+    actionLabel={t('versions.report.action')}
+    href={localizePath(ROUTES.contact, locale)}
+  />
+</BaseLayout>

@@ -1,0 +1,40 @@
+---
+import BaseLayout from '@app/layouts/BaseLayout.astro';
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { ROUTES } from '@shared/i18n/routes';
+import ProductPreviewPreload from '@widgets/product-preview/ProductPreviewPreload.astro';
+import HomeHero from '@widgets/home-hero/HomeHero.astro';
+import PlatformAvailability from '@widgets/platform-availability/PlatformAvailability.astro';
+import SynchronizedSurfaces from '@widgets/synchronized-surfaces/SynchronizedSurfaces.astro';
+import LearningTrack from '@widgets/learning-track/LearningTrack.astro';
+import FeatureGrid from '@widgets/feature-grid/FeatureGrid.astro';
+import DownloadPanel from '@widgets/download-panel/DownloadPanel.astro';
+import ClosingCta from '@widgets/closing-cta/ClosingCta.astro';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  path={ROUTES.home}
+  title={t('home.seoTitle')}
+  description={t('home.seoDescription')}
+>
+  <Fragment slot="head">
+    <ProductPreviewPreload locale={locale} />
+  </Fragment>
+
+  <HomeHero locale={locale} />
+  <PlatformAvailability locale={locale} />
+  <SynchronizedSurfaces locale={locale} />
+  <LearningTrack locale={locale} />
+  <FeatureGrid locale={locale} />
+  <DownloadPanel locale={locale} />
+  <ClosingCta locale={locale} />
+</BaseLayout>

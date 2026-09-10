@@ -1,0 +1,86 @@
+---
+export interface Props {
+  label: string;
+  stageLabels: readonly string[];
+}
+
+const { label, stageLabels } = Astro.props;
+const FLAG_PATH =
+  'M 83.6584,3.1708 A 3,3 0 0 1 88,5.8541 L 88,22.1459 A 3,3 0 0 1 83.6584,24.8292 ' +
+  'L 67.3666,16.6833 A 3,3 0 0 1 67.3666,11.3167 Z';
+const WIDE_LABEL_POSITIONS = [
+  { x: 33.5, y: 101.7 },
+  { x: 430, y: 66.6 },
+  { x: 854, y: 31.5 },
+];
+---
+
+<div class="brand-track">
+  <svg
+    class="pl-only-wide brand-track__wide"
+    viewBox="0 0 1248 139.05"
+    width="100%"
+    role="img"
+    aria-label={label}
+  >
+    <path
+      d="M15.5 120.15 H412 V85.05 H836 V49.95 H1232.55 V14.85"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="18.9"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    ></path>
+    <circle cx="15.5" cy="120.15" r="13.5" fill="currentColor"></circle>
+    <g transform="translate(1113.75 4.05) scale(1.35)">
+      <path d={FLAG_PATH} fill="currentColor"></path>
+    </g>
+    {stageLabels.map((stageLabel, index) => (
+      <text x={WIDE_LABEL_POSITIONS[index]?.x} y={WIDE_LABEL_POSITIONS[index]?.y} class="brand-track__label">
+        {stageLabel}
+      </text>
+    ))}
+  </svg>
+
+  <svg
+    class="pl-only-narrow brand-track__narrow"
+    viewBox="0 0 430 104"
+    width="100%"
+    role="img"
+    aria-label={label}
+  >
+    <path
+      d="M12 90 H150 V64 H292 V38 H417 V12"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="14"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    ></path>
+    <circle cx="12" cy="90" r="10" fill="currentColor"></circle>
+    <g transform="translate(329 4)">
+      <path d={FLAG_PATH} fill="currentColor"></path>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .brand-track {
+    margin-top: 28px;
+    color: var(--pl-on-field);
+  }
+
+  .brand-track__label {
+    font-family: var(--pl-font-code);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.7px;
+    fill: var(--pl-on-field-2);
+  }
+
+  @media (min-width: 900px) {
+    .brand-track {
+      margin-top: 56px;
+    }
+  }
+</style>

@@ -1,0 +1,43 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { Icon } from '@shared/ui/icon';
+import { SelectField } from '@shared/ui/select-field';
+import { LEARNING_MODULES, SPECIFICATION_IDS } from '@entities/learning-module/model/curriculum';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<div class="pl-branch pl-branch--question">
+  <p class="pl-overline pl-overline--brand pl-branch__label">{t('contact.branch.question.label')}</p>
+  <div class="pl-form-field">
+    <label class="pl-form-field__label" for="subject-select">
+      {t('contact.branch.question.subjectLabel')}
+    </label>
+    <SelectField id="subject-select" name="subject">
+      <optgroup label={t('contact.branch.question.groupModules')}>
+        {LEARNING_MODULES.map((module) => (
+          <option value={module.id}>{t(`module.${module.id}`)}</option>
+        ))}
+      </optgroup>
+      <optgroup label={t('contact.branch.question.groupSpecs')}>
+        {SPECIFICATION_IDS.map((specId) => (
+          <option value={`spec-${specId}`}>{t(`spec.${specId}`)}</option>
+        ))}
+      </optgroup>
+      <optgroup label={t('contact.branch.question.groupGeneral')}>
+        <option value="general-question">{t('contact.branch.question.generalOption')}</option>
+      </optgroup>
+    </SelectField>
+    <span class="pl-form-field__help">{t('contact.branch.question.subjectHelp')}</span>
+  </div>
+  <p class="pl-notice pl-notice--info">
+    <Icon name="info" size={18} />
+    <span>{t('contact.branch.question.notice')}</span>
+  </p>
+</div>

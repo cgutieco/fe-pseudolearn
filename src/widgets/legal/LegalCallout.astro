@@ -1,0 +1,47 @@
+---
+import { RichText } from '@shared/ui/rich-text';
+
+export interface Props {
+  title: string;
+  text: string;
+}
+
+const { title, text } = Astro.props;
+---
+
+<aside class="pl-card legal-callout">
+  <h3 class="legal-callout__title">{title}</h3>
+  <RichText as="p" class="legal-callout__text" text={text} />
+</aside>
+
+<style>
+  .legal-callout {
+    margin-top: var(--pl-space-md);
+    padding: var(--pl-space-md);
+    background: var(--pl-brand-faint);
+    border: 1px solid var(--pl-brand-tint);
+    border-left: 4px solid var(--pl-brand);
+  }
+
+  .legal-callout__title {
+    margin: 0 0 var(--pl-space-xs);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--pl-ink);
+  }
+
+  .legal-callout__text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--pl-ink-2);
+  }
+
+  @media (min-width: 900px) {
+    .legal-callout {
+      margin-top: var(--pl-space-lg);
+      padding: 18px var(--pl-space-lg);
+    }
+  }
+</style>

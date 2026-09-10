@@ -1,0 +1,32 @@
+name: Error
+description: Algo del sitio no funciona como debería
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Qué ocurrió
+      description: Y qué esperabas que ocurriera en su lugar.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos para reproducirlo
+      placeholder: |
+        1. Ir a /contact
+        2. Elegir el motivo «Algo no funciona»
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Navegador y sistema operativo
+    validations:
+      required: true
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Tema
+      options: [Claro, Oscuro, Los dos, No aplica]

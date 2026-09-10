@@ -1,0 +1,184 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { RichText } from '@shared/ui/rich-text';
+import { RELEASES } from '@entities/release/model/release-catalog';
+
+export interface Props {
+  locale: Locale;
+  release: (typeof RELEASES)[number];
+}
+
+const { locale, release } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<li class="pl-card release-entry">
+  <div class="release-entry__head">
+    <span class="pl-mono release-entry__version">{release.version}</span>
+    <span class="release-entry__spacer"></span>
+    <span class="pl-tag">
+      <span class="pl-status-dot"></span>
+      <span>{t('versions.channelStable')}</span>
+    </span>
+    <span class="pl-mono release-entry__date">{t('versions.datePlaceholder')}</span>
+  </div>
+
+  <div class="release-entry__body">
+    <h3 class="release-entry__headline">{t(`versions.release.${release.id}.headline`)}</h3>
+    <p class="release-entry__summary">{t(`versions.release.${release.id}.summary`)}</p>
+
+    <ul class="release-entry__rows">
+      {release.highlights.map((highlight) => (
+        <li class="release-entry__row">
+          <span class="pl-overline pl-overline--brand release-entry__row-label">
+            {t(`versions.release.${release.id}.${highlight}Label`)}
+          </span>
+          <RichText
+            as="p"
+            class="release-entry__row-text"
+            text={t(`versions.release.${release.id}.${highlight}Text`)}
+          />
+        </li>
+      ))}
+    </ul>
+  </div>
+</li>
+
+<style>
+  .release-entry {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .release-entry__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--pl-space-xs) 14px;
+    padding: var(--pl-space-md) 18px;
+    background: var(--pl-brand-faint);
+    border-bottom: 1px solid var(--pl-line-soft);
+  }
+
+  .release-entry__version {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .release-entry__date {
+    font-size: 13px;
+    color: var(--pl-ink-3);
+  }
+
+  .release-entry__spacer {
+    display: none;
+  }
+
+  .release-entry :global(.pl-tag) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--pl-space-xs);
+  }
+
+  .release-entry__body {
+    padding: 20px 18px 22px;
+  }
+
+  .release-entry__headline {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+  }
+
+  .release-entry__summary {
+    margin-top: var(--pl-space-xs);
+    max-width: 780px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--pl-ink-2);
+  }
+
+  .release-entry__rows {
+    margin-top: 20px;
+    border-top: 1px solid var(--pl-line-soft);
+  }
+
+  .release-entry__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 7px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--pl-line-soft);
+  }
+
+  .release-entry__row:last-child {
+    border-bottom: 0;
+  }
+
+  .release-entry__row-label {
+    padding-top: 2px;
+  }
+
+  .release-entry :global(.release-entry__row-text) {
+    max-width: 760px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--pl-ink-2);
+  }
+
+  .release-entry :global(.release-entry__row-text code) {
+    font-family: var(--pl-font-code);
+    font-size: 13px;
+    color: var(--pl-ink);
+  }
+
+  @media (min-width: 900px) {
+    .release-entry__head {
+      gap: 10px 20px;
+      padding: 22px 28px;
+    }
+
+    .release-entry__version {
+      font-size: 26px;
+    }
+
+    .release-entry__date {
+      font-size: 13px;
+    }
+
+    .release-entry__spacer {
+      display: block;
+      flex: 1;
+    }
+
+    .release-entry__body {
+      padding: 26px 28px 28px;
+    }
+
+    .release-entry__headline {
+      font-size: 21px;
+    }
+
+    .release-entry__summary {
+      margin-top: 10px;
+      font-size: 15px;
+    }
+
+    .release-entry__rows {
+      margin-top: 26px;
+    }
+
+    .release-entry__row {
+      grid-template-columns: 190px minmax(0, 1fr);
+      gap: var(--pl-space-lg);
+      padding: var(--pl-space-md) 0;
+    }
+
+    .release-entry :global(.release-entry__row-text) {
+      font-size: 15px;
+    }
+  }
+</style>

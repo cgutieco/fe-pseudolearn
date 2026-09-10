@@ -1,0 +1,55 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { CONTACT_REASONS } from '@entities/contact-request/model/contact-request';
+import { SITE } from '@shared/config/site';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<div class="pl-form-field message-field">
+  <label class="pl-form-field__label" for="message-field">
+    {t('contact.field.messageLabel')}
+  </label>
+  <textarea
+    id="message-field"
+    name="message"
+    class="pl-form-control pl-form-control--textarea"
+    maxlength={SITE.messageMaxLength}
+    placeholder={t('contact.field.messagePlaceholder')}
+    aria-describedby="message-counter"
+    required
+  ></textarea>
+  <span class="pl-form-field__meta">
+    {CONTACT_REASONS.map((reason) => (
+      <span class:list={['pl-hint', `pl-hint--${reason}`]}>{t(`contact.hint.${reason}`)}</span>
+    ))}
+    <span class="pl-mono pl-form-field__counter" id="message-counter" aria-live="polite">
+      {t('contact.field.counter', { used: 0, total: SITE.messageMaxLength })}
+    </span>
+  </span>
+</div>
+
+<style>
+  .message-field {
+    margin-top: var(--pl-space-md);
+  }
+
+  .message-field :global(.pl-hint) {
+    flex: 1;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--pl-ink-3);
+  }
+
+  @media (min-width: 900px) {
+    .message-field {
+      margin-top: 20px;
+    }
+  }
+</style>

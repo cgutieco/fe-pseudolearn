@@ -1,0 +1,42 @@
+---
+import BaseLayout from '@app/layouts/BaseLayout.astro';
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { ROUTES } from '@shared/i18n/routes';
+import PageHero from '@widgets/page-hero/PageHero.astro';
+import LegalLayout from '@widgets/legal/LegalLayout.astro';
+import LegalSidebar from '@widgets/legal/LegalSidebar.astro';
+import LegalSummary from '@widgets/legal/LegalSummary.astro';
+import LegalSection from '@widgets/legal/LegalSection.astro';
+import { PRIVACY_META, PRIVACY_SECTIONS } from '@entities/legal/model/privacy-policy';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  path={ROUTES.privacy}
+  title={t('privacy.seoTitle')}
+  description={t('privacy.seoDescription')}
+>
+  <PageHero
+    overline={t('privacy.hero.overline')}
+    title={t('privacy.hero.title')}
+    lead={t('privacy.hero.lead')}
+  />
+
+  <LegalLayout>
+    <LegalSidebar slot="sidebar" locale={locale} meta={PRIVACY_META} sections={PRIVACY_SECTIONS} />
+    <article>
+      <LegalSummary locale={locale} meta={PRIVACY_META} />
+      {PRIVACY_SECTIONS.map((section) => (
+        <LegalSection locale={locale} section={section} />
+      ))}
+    </article>
+  </LegalLayout>
+</BaseLayout>

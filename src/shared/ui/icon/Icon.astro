@@ -1,0 +1,36 @@
+---
+import { ICONS, type IconName } from './icon-registry';
+
+export interface Props {
+  name: IconName;
+  size?: number;
+  strokeWidth?: number;
+  class?: string;
+}
+
+const { name, size = 18, strokeWidth = 1.7, class: className } = Astro.props;
+const icon = ICONS[name];
+---
+
+<svg
+  class:list={['pl-icon', className]}
+  viewBox="0 0 24 24"
+  width={size}
+  height={size}
+  fill="none"
+  stroke="currentColor"
+  stroke-width={strokeWidth}
+  stroke-linecap="round"
+  stroke-linejoin={'linejoin' in icon && icon.linejoin ? 'round' : undefined}
+  aria-hidden="true"
+  focusable="false"
+>
+  {'rects' in icon &&
+    icon.rects?.map((rect) => (
+      <rect x={rect.x} y={rect.y} width={rect.width} height={rect.height} rx={rect.rx} />
+    ))}
+  {'circles' in icon && icon.circles?.map((circle) => <circle cx={circle.cx} cy={circle.cy} r={circle.r} />)}
+  {icon.paths.map((path) => (
+    <path d={path} />
+  ))}
+</svg>

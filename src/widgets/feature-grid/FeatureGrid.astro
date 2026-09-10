@@ -1,0 +1,86 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { RichText } from '@shared/ui/rich-text';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+
+const FEATURES = ['stepping', 'diagnostics', 'projection', 'objects', 'ownership', 'bilingual'] as const;
+---
+
+<section class="features">
+  <div class="pl-container">
+    <p class="pl-overline pl-overline--brand">{t('home.features.overline')}</p>
+    <h2 class="pl-section-title features__title">{t('home.features.title')}</h2>
+    <ul class="features__list">
+      {FEATURES.map((feature, index) => (
+        <li class="features__item">
+          <div class="pl-numbered">
+            <span class="pl-numbered__index">{String(index + 1).padStart(2, '0')}</span>
+            <div>
+              <h3 class="pl-numbered__title">{t(`home.features.${feature}.title`)}</h3>
+              <RichText as="p" class="pl-numbered__text" text={t(`home.features.${feature}.description`)} />
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .features {
+    padding-top: 64px;
+  }
+
+  .features__title {
+    margin-top: 14px;
+    margin-bottom: 28px;
+    max-width: 820px;
+  }
+
+  .features__list {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .features__item {
+    padding: 22px 0;
+    border-top: 1px solid var(--pl-line);
+  }
+
+  .features__item:last-child {
+    border-bottom: 1px solid var(--pl-line);
+  }
+
+  @media (min-width: 900px) {
+    .features {
+      padding-top: 104px;
+    }
+
+    .features__title {
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+
+    .features__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 80px;
+      margin-top: var(--pl-space-4xl);
+    }
+
+    .features__item {
+      padding: 28px 0;
+    }
+
+    .features__item:last-child,
+    .features__item:nth-last-child(2) {
+      border-bottom: 0;
+    }
+  }
+</style>

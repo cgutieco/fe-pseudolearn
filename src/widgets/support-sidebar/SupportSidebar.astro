@@ -1,0 +1,143 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { Icon } from '@shared/ui/icon';
+import { RichText } from '@shared/ui/rich-text';
+import SupportPromises from './SupportPromises.astro';
+import { SITE, ANCHORS } from '@shared/config/site';
+import { anchorOnHome } from '@shared/i18n/routes';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+
+const TIPS = [
+  'contact.sidebar.tipContext',
+  'contact.sidebar.tipExpected',
+  'contact.sidebar.tipActual',
+] as const;
+
+const specificationHref = anchorOnHome(ANCHORS.specification, locale);
+---
+
+<aside class="sidebar">
+  <SupportPromises locale={locale} />
+
+  <div class="pl-card sidebar__block">
+    <p class="pl-overline pl-overline--brand sidebar__label">{t('contact.sidebar.tipsLabel')}</p>
+    <ol class="sidebar__tips">
+      {TIPS.map((tip, index) => (
+        <li>
+          <span class="pl-mono sidebar__tip-number">{String(index + 1).padStart(2, '0')}</span>
+          <RichText text={t(tip)} />
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <div class="pl-card sidebar__block">
+    <p class="pl-overline pl-overline--brand sidebar__label">{t('contact.sidebar.emailLabel')}</p>
+    <a class="sidebar__email pl-mono" href={`mailto:${SITE.supportEmail}`}>
+      {SITE.supportEmail}
+    </a>
+    <p class="sidebar__text">{t('contact.sidebar.emailNote')}</p>
+  </div>
+
+  <div class="pl-card pl-card--tint sidebar__block">
+    <p class="pl-overline pl-overline--brand sidebar__label">{t('contact.sidebar.knowledgeLabel')}</p>
+    <p class="sidebar__text">{t('contact.sidebar.knowledgeText')}</p>
+    <a class="pl-link-arrow sidebar__link" href={specificationHref}>
+      <span>{t('contact.sidebar.knowledgeLink')}</span>
+      <Icon name="arrowRight" size={15} strokeWidth={1.8} />
+    </a>
+  </div>
+</aside>
+
+<style>
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .sidebar__block {
+    padding: 20px 18px;
+  }
+
+  .sidebar__label {
+    display: block;
+    margin-bottom: var(--pl-space-sm);
+  }
+
+  .sidebar__text {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--pl-ink-2);
+  }
+
+  .sidebar__email {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--pl-ink);
+    text-decoration: none;
+  }
+
+  .sidebar__email:hover {
+    color: var(--pl-brand);
+  }
+
+  .sidebar__link {
+    margin-top: var(--pl-space-sm);
+    font-size: 14px;
+  }
+
+  .sidebar__tips {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sidebar__tips li {
+    display: flex;
+    gap: 11px;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--pl-ink-2);
+  }
+
+  .sidebar__tip-number {
+    flex: none;
+    padding-top: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--pl-brand);
+  }
+
+  .sidebar__tips :global(code) {
+    font-family: var(--pl-font-code);
+    font-size: 13px;
+    color: var(--pl-ink);
+  }
+
+  @media (min-width: 900px) {
+    .sidebar {
+      width: 412px;
+      flex: none;
+      gap: var(--pl-space-md);
+    }
+
+    .sidebar__block {
+      padding: var(--pl-space-lg);
+    }
+
+    .sidebar__email {
+      margin-bottom: var(--pl-space-sm);
+      font-size: 16px;
+    }
+  }
+</style>

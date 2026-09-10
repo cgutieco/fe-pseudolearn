@@ -1,0 +1,57 @@
+---
+import BaseLayout from '@app/layouts/BaseLayout.astro';
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { ROUTES, localizePath } from '@shared/i18n/routes';
+import PageHero from '@widgets/page-hero/PageHero.astro';
+import SupportSidebar from '@widgets/support-sidebar/SupportSidebar.astro';
+import ContactForm from '@features/contact-form/ContactForm.astro';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+const home = localizePath(ROUTES.home, locale);
+const privacyHref = `${home === '/' ? '' : home}/privacy`;
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
+---
+
+<BaseLayout
+  locale={locale}
+  path={ROUTES.contact}
+  title={t('contact.seoTitle')}
+  description={t('contact.seoDescription')}
+>
+  <PageHero
+    overline={t('contact.hero.overline')}
+    title={t('contact.hero.title')}
+    lead={t('contact.hero.lead')}
+  />
+
+  <div class="pl-container contact-layout">
+    <ContactForm locale={locale} privacyHref={privacyHref} turnstileSiteKey={turnstileSiteKey} />
+    <SupportSidebar locale={locale} />
+  </div>
+</BaseLayout>
+
+<style>
+  .contact-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 36px;
+    padding-bottom: 56px;
+  }
+
+  @media (min-width: 900px) {
+    .contact-layout {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--pl-space-2xl);
+      padding-top: 72px;
+      padding-bottom: var(--pl-space-4xl);
+    }
+  }
+</style>

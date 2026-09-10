@@ -1,0 +1,190 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { localizePath } from '@shared/i18n/routes';
+import type { LegalSection as LegalSectionType } from '@entities/legal/model/legal-document';
+import { RichText } from '@shared/ui/rich-text';
+import { Icon } from '@shared/ui/icon';
+import LegalCallout from './LegalCallout.astro';
+
+export interface Props {
+  locale: Locale;
+  section: LegalSectionType;
+}
+
+const { locale, section } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<section id={section.id} class="legal-section">
+  <div class="legal-section__header">
+    <span class="pl-mono legal-section__number">{section.number}</span>
+    <h2 class="legal-section__title">{t(section.titleKey)}</h2>
+  </div>
+
+  <p class="legal-section__lead">{t(section.leadKey)}</p>
+
+  {section.callout && <LegalCallout title={t(section.callout.titleKey)} text={t(section.callout.textKey)} />}
+
+  {section.cards && (
+    <div class="legal-section__cards">
+      {section.cards.map((card) => (
+        <div class="pl-card legal-section__card">
+          <h3 class="legal-section__card-title">{t(card.titleKey)}</h3>
+          <RichText as="p" class="legal-section__card-text" text={t(card.textKey)} />
+        </div>
+      ))}
+    </div>
+  )}
+
+  {section.bodyKeys && (
+    <div class="legal-section__body">
+      {section.bodyKeys.map((key) => (
+        <RichText as="p" class="legal-section__paragraph" text={t(key)} />
+      ))}
+    </div>
+  )}
+
+  {section.items && (
+    <ul class="legal-section__list">
+      {section.items.map((itemKey) => (
+        <li>
+          <RichText text={t(itemKey)} />
+        </li>
+      ))}
+    </ul>
+  )}
+
+  {section.link && (
+    <div class="legal-section__action">
+      <a class="pl-link-arrow legal-section__link" href={localizePath(section.link.href, locale)}>
+        <span>{t(section.link.labelKey)}</span>
+        <Icon name="arrowRight" size={15} strokeWidth={1.8} />
+      </a>
+    </div>
+  )}
+</section>
+
+<style>
+  .legal-section {
+    padding-top: var(--pl-space-xl);
+    padding-bottom: var(--pl-space-xl);
+    border-top: 1px solid var(--pl-line);
+    scroll-margin-top: 80px;
+  }
+
+  .legal-section__header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--pl-space-sm);
+    margin-bottom: var(--pl-space-sm);
+  }
+
+  .legal-section__number {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--pl-brand);
+    flex: none;
+  }
+
+  .legal-section__title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--pl-ink);
+  }
+
+  .legal-section__lead {
+    margin: 0 0 var(--pl-space-md);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--pl-ink-2);
+  }
+
+  .legal-section__cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--pl-space-md);
+    margin-top: var(--pl-space-md);
+  }
+
+  .legal-section__card {
+    padding: var(--pl-space-md);
+  }
+
+  .legal-section__card-title {
+    margin: 0 0 var(--pl-space-xs);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--pl-ink);
+  }
+
+  .legal-section__card-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--pl-ink-2);
+  }
+
+  .legal-section__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pl-space-sm);
+  }
+
+  .legal-section__paragraph {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--pl-ink-2);
+  }
+
+  .legal-section__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pl-space-xs);
+    margin: var(--pl-space-md) 0 0;
+    padding-left: 20px;
+  }
+
+  .legal-section__list li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--pl-ink-2);
+  }
+
+  .legal-section__action {
+    margin-top: var(--pl-space-md);
+  }
+
+  .legal-section__link {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  @media (min-width: 900px) {
+    .legal-section {
+      padding-top: var(--pl-space-2xl);
+      padding-bottom: var(--pl-space-2xl);
+    }
+
+    .legal-section__title {
+      font-size: 26px;
+    }
+
+    .legal-section__cards {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--pl-space-md);
+      margin-top: var(--pl-space-lg);
+    }
+
+    .legal-section__card {
+      padding: var(--pl-space-lg);
+    }
+
+    .legal-section__paragraph {
+      font-size: 15px;
+    }
+  }
+</style>

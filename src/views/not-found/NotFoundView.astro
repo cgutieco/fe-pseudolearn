@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@app/layouts/BaseLayout.astro';
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { ROUTES, localizePath } from '@shared/i18n/routes';
+import { Icon } from '@shared/ui/icon';
+import PageHero from '@widgets/page-hero/PageHero.astro';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  path={ROUTES.home}
+  title={t('notFound.seoTitle')}
+  description={t('notFound.seoDescription')}
+  noIndex
+>
+  <PageHero overline={t('notFound.overline')} title={t('notFound.title')} lead={t('notFound.lead')} />
+  <div class="pl-container not-found__actions">
+    <a class="pl-btn pl-btn--primary" href={localizePath(ROUTES.home, locale)}>
+      <Icon name="arrowRight" size={18} />
+      <span>{t('notFound.action')}</span>
+    </a>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found__actions {
+    padding-top: var(--pl-space-2xl);
+    padding-bottom: var(--pl-space-4xl);
+  }
+</style>

@@ -1,0 +1,28 @@
+name: Accesibilidad
+description: Una barrera de accesibilidad en el sitio
+labels: [a11y]
+body:
+  - type: textarea
+    id: barrier
+    attributes:
+      label: Qué barrera encontraste
+      description: Qué intentabas hacer y qué te lo impidió.
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Página
+      placeholder: /contact
+    validations:
+      required: true
+  - type: input
+    id: tooling
+    attributes:
+      label: Tecnología de apoyo, si la usabas
+      placeholder: VoiceOver en Safari, NVDA en Firefox, solo teclado...
+  - type: input
+    id: criterion
+    attributes:
+      label: Criterio WCAG, si lo conoces
+      placeholder: 1.4.3 Contraste mínimo

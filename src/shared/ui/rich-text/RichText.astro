@@ -1,0 +1,13 @@
+---
+import { renderRichText } from './render-rich-text';
+
+export interface Props {
+  text: string;
+  as?: 'p' | 'span' | 'div' | 'li';
+  class?: string;
+}
+
+const { text, as: Tag = 'span', class: className } = Astro.props;
+---
+
+<Tag class={className} set:html={renderRichText(text)} />

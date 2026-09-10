@@ -1,0 +1,112 @@
+---
+import { Icon } from '@shared/ui/icon';
+import { useTranslations } from '@shared/i18n/translator';
+import { otherLocale, type Locale } from '@shared/i18n/locales';
+import { localizePath } from '@shared/i18n/routes';
+
+export interface Props {
+  locale: Locale;
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+const { t } = useTranslations(locale);
+const suggested = otherLocale(locale);
+---
+
+<aside class="language-notice" data-language-notice data-suggested={suggested} hidden>
+  <p class="language-notice__text" lang={suggested}>
+    {t('language.bannerText')}
+  </p>
+  <a
+    class="language-notice__action"
+    href={localizePath(path, suggested)}
+    hreflang={suggested}
+    lang={suggested}
+  >
+    {t('language.bannerAction')}
+  </a>
+  <button
+    type="button"
+    class="language-notice__dismiss"
+    data-language-dismiss
+    aria-label={t('language.bannerDismiss')}
+  >
+    <Icon name="cross" size={16} strokeWidth={1.8} />
+  </button>
+</aside>
+
+<style>
+  .language-notice {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--pl-space-sm);
+    padding: 10px var(--pl-space-md);
+    background: var(--pl-brand-faint);
+    border-bottom: 1px solid var(--pl-line);
+    font-size: 14px;
+  }
+
+  .language-notice__text {
+    flex: 1;
+    min-width: 200px;
+    color: var(--pl-ink-2);
+  }
+
+  .language-notice__action {
+    color: var(--pl-brand);
+    font-weight: 600;
+  }
+
+  .language-notice__dismiss {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--pl-touch-target);
+    height: var(--pl-touch-target);
+    border: 0;
+    background: transparent;
+    color: var(--pl-ink-3);
+    cursor: pointer;
+  }
+
+  .language-notice__dismiss:hover {
+    color: var(--pl-ink);
+  }
+</style>
+
+<script>
+  import { LANGUAGE_STORAGE_KEY, shouldOfferOtherLocale } from './language-preference';
+
+  const notice = document.querySelector<HTMLElement>('[data-language-notice]');
+  if (notice) {
+    const suggested = notice.dataset.suggested ?? '';
+    let stored: string | null;
+    try {
+      stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    } catch {
+      stored = null;
+    }
+    notice.hidden = !shouldOfferOtherLocale(stored, navigator.languages ?? [navigator.language], suggested);
+
+    notice.querySelector('[data-language-dismiss]')?.addEventListener('click', () => {
+      notice.hidden = true;
+      try {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, document.documentElement.lang);
+      } catch {
+        notice.hidden = true;
+      }
+    });
+  }
+
+  for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-language-choice]')) {
+    link.addEventListener('click', () => {
+      try {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, link.dataset.languageChoice ?? '');
+      } catch {
+        return;
+      }
+    });
+  }
+</script>

@@ -1,0 +1,117 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { Icon } from '@shared/ui/icon';
+import { ANCHORS } from '@shared/config/site';
+import ProductPreview from '@widgets/product-preview/ProductPreview.astro';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+const downloadsAnchor = `#${ANCHORS.downloads}`;
+---
+
+<section class="home-hero pl-field">
+  <div class="pl-container home-hero__inner">
+    <p class="pl-overline pl-overline--field">{t('home.hero.overline')}</p>
+    <h1 class="pl-display home-hero__title">{t('home.hero.title')}</h1>
+    <p class="pl-lede pl-lede--field pl-lede--hero home-hero__lead">{t('home.hero.lead')}</p>
+    <div class="home-hero__actions">
+      <a class="pl-btn pl-btn--on-field" href={downloadsAnchor}>
+        <Icon name="download" size={19} />
+        <span>{t('home.hero.ctaPrimary')}</span>
+      </a>
+      <a class="pl-btn pl-btn--outline-field" href={downloadsAnchor}>
+        <span>{t('home.hero.ctaSecondary')}</span>
+        <Icon name="arrowRight" size={17} />
+      </a>
+    </div>
+    <p class="home-hero__requirements pl-mono">{t('home.hero.requirements')}</p>
+  </div>
+</section>
+
+<section class="home-hero__mount" id={ANCHORS.editor} aria-label={t('home.preview.regionLabel')}>
+  <div class="pl-container">
+    <ProductPreview locale={locale} />
+  </div>
+</section>
+
+<style>
+  .home-hero__inner {
+    padding-top: var(--pl-space-2xl);
+    padding-bottom: 180px;
+  }
+
+  .home-hero__title {
+    margin-top: var(--pl-space-md);
+    color: var(--pl-on-field);
+  }
+
+  .home-hero__lead {
+    margin-top: 20px;
+    max-width: 660px;
+  }
+
+  .home-hero__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 28px;
+  }
+
+  .home-hero__actions :global(.pl-btn) {
+    width: 100%;
+  }
+
+  .home-hero__requirements {
+    margin-top: 18px;
+    font-size: 11px;
+    line-height: 17px;
+    color: var(--pl-on-field-2);
+    opacity: 0.82;
+  }
+
+  .home-hero__mount {
+    position: relative;
+    margin-top: -180px;
+  }
+
+  @media (min-width: 900px) {
+    .home-hero__inner {
+      padding-top: var(--pl-space-4xl);
+      padding-bottom: 268px;
+    }
+
+    .home-hero__title {
+      margin-top: var(--pl-space-lg);
+      max-width: 940px;
+    }
+
+    .home-hero__lead {
+      margin-top: var(--pl-space-xl);
+    }
+
+    .home-hero__actions {
+      flex-direction: row;
+      gap: var(--pl-space-md);
+      margin-top: 40px;
+    }
+
+    .home-hero__actions :global(.pl-btn) {
+      width: auto;
+    }
+
+    .home-hero__requirements {
+      margin-top: 22px;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+    }
+
+    .home-hero__mount {
+      margin-top: -268px;
+    }
+  }
+</style>

@@ -1,0 +1,54 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "selector-class-pattern": [
+      "^[a-z0-9]+(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+      {
+        "message": "La clase debe seguir BEM estricto: block__element--modifier",
+        "resolveNestedSelectors": true
+      }
+    ],
+    "custom-property-pattern": "^pl-[a-z0-9]+(-[a-z0-9]+)*$",
+    "declaration-property-value-disallowed-list": {
+      "/^(color|background-color|border-color|fill|stroke|outline-color|caret-color)$/": [
+        "/^#[0-9a-fA-F]{3,8}$/",
+        "/^rgba?\\(/",
+        "/^hsla?\\(/",
+        "/^oklch\\(/"
+      ]
+    },
+    "no-descending-specificity": null,
+    "declaration-block-no-redundant-longhand-properties": null,
+    "comment-empty-line-before": null,
+    "media-feature-range-notation": "prefix",
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/shared/styles/*.css"],
+      "rules": {
+        "selector-class-pattern": [
+          "^pl-[a-z0-9]+(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+          {
+            "message": "El vocabulario CSS p\u00fablico lleva prefijo pl- y sigue BEM estricto"
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/shared/styles/tokens.css"],
+      "rules": {
+        "declaration-property-value-disallowed-list": null
+      }
+    },
+    {
+      "files": ["**/*.astro"],
+      "customSyntax": "postcss-html"
+    }
+  ]
+}

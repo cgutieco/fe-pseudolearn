@@ -1,0 +1,50 @@
+---
+export interface Props {
+  overline: string;
+  title: string;
+  lead: string;
+}
+
+const { overline, title, lead } = Astro.props;
+---
+
+<section class="page-hero pl-field">
+  <div class="pl-container page-hero__inner">
+    <p class="pl-overline pl-overline--field">{overline}</p>
+    <h1 class="pl-display pl-display--page page-hero__title">{title}</h1>
+    <p class="pl-lede pl-lede--field pl-lede--page page-hero__lead">{lead}</p>
+  </div>
+</section>
+
+<style>
+  .page-hero__inner {
+    padding-top: var(--pl-space-2xl);
+    padding-bottom: var(--pl-space-2xl);
+  }
+
+  .page-hero__title {
+    margin-top: 14px;
+    color: var(--pl-on-field);
+  }
+
+  .page-hero__lead {
+    margin-top: 18px;
+    max-width: 680px;
+  }
+
+  @media (min-width: 900px) {
+    .page-hero__inner {
+      padding-top: 76px;
+      padding-bottom: 76px;
+    }
+
+    .page-hero__title {
+      margin-top: 20px;
+      max-width: 900px;
+    }
+
+    .page-hero__lead {
+      margin-top: var(--pl-space-lg);
+    }
+  }
+</style>

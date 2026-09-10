@@ -1,0 +1,26 @@
+---
+import type { Locale } from '@shared/i18n/locales';
+import { previewSources } from './preview-sources';
+
+export interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'es' } = Astro.props;
+const sources = await previewSources(locale);
+const preferredFormat = 'avif';
+---
+
+{sources
+  .filter((source) => source.format === preferredFormat)
+  .map((source) => (
+    <link
+      rel="preload"
+      as="image"
+      type={`image/${source.format}`}
+      media={source.preloadMedia}
+      imagesrcset={source.srcSet}
+      imagesizes={source.sizes}
+      fetchpriority="high"
+    />
+  ))}

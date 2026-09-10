@@ -1,0 +1,60 @@
+package: fe-pseudolearn
+
+layers:
+  app:
+    directory: src/app
+    imports: [app, widgets, features, entities, shared]
+  views:
+    directory: src/views
+    imports: [app, views, widgets, features, entities, shared]
+  widgets:
+    directory: src/widgets
+    imports: [widgets, features, entities, shared]
+  features:
+    directory: src/features
+    imports: [features, entities, shared]
+  entities:
+    directory: src/entities
+    imports: [entities, shared]
+  shared:
+    directory: src/shared
+    imports: [shared]
+
+routes:
+  directory: src/pages
+  imports: [views, shared]
+  maxLines: 14
+  localePrefix: en
+
+unlayeredDirectories: [pages, assets]
+
+assetsAlias: '@assets'
+
+forbiddenDirectories:
+  - src/components
+  - src/layouts
+  - src/lib
+  - src/styles
+  - src/i18n
+  - src/utils
+  - src/helpers
+
+exclusiveImports:
+  'cloudflare:workers': src/shared/lib/runtime-env.ts
+  'cloudflare:sockets': src/entities/contact-request/api/oci-smtp-mail-gateway.ts
+
+globalStylesheets: src/shared/styles
+globalClassPrefix: pl-
+
+size:
+  astroFile: 210
+  astroTemplate: 95
+  typescriptFile: 160
+  function: 40
+  positionalParameters: 3
+  nesting: 3
+
+budget:
+  clientJavaScriptPerRouteBytes: 10240
+  totalJavaScriptBytes: 24576
+  cssPerRouteBytes: 51200

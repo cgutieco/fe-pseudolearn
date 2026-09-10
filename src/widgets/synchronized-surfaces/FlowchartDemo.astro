@@ -1,0 +1,119 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+const temperature = t('demo.variableTemperature');
+---
+
+<div class="flowchart-demo">
+  <svg
+    class="flowchart-demo__canvas"
+    viewBox="8 -8 273 229"
+    role="img"
+    aria-label={t('home.surfaces.flowchart.diagramLabel')}
+  >
+    <g fill="none" stroke="var(--pl-line-strong)" stroke-width="1.5">
+      <path d="M141.5 100.8 V124.8"></path>
+      <path d="M241 50.4 H273 V204.8 H141.5"></path>
+    </g>
+    <polygon points="141.5,124.8 138.5,116.8 144.5,116.8" fill="var(--pl-line-strong)"></polygon>
+    <polygon points="141.5,204.8 149.5,201.8 149.5,207.8" fill="var(--pl-line-strong)"></polygon>
+    <path
+      d="M141.5 172.8 V184.8 H16 V50.4 H42"
+      fill="none"
+      stroke="var(--pl-focus)"
+      stroke-width="1.5"
+    ></path>
+    <polygon points="42,50.4 34,47.4 34,53.4" fill="var(--pl-focus)"></polygon>
+
+    <polygon
+      points="141.5,0 241,50.4 141.5,100.8 42,50.4"
+      fill="var(--pl-raised)"
+      stroke="var(--pl-line-strong)"
+    ></polygon>
+    <rect
+      x="32"
+      y="124.8"
+      width="219"
+      height="48"
+      rx="8"
+      fill="var(--pl-raised)"
+      stroke="var(--pl-line-strong)"
+    ></rect>
+    <circle cx="141.5" cy="204.8" r="8" fill="var(--pl-line-strong)"></circle>
+    <rect
+      x="32"
+      y="124.8"
+      width="219"
+      height="48"
+      rx="8"
+      fill="none"
+      stroke="var(--pl-focus)"
+      stroke-width="2"
+    ></rect>
+
+    <g class="flowchart-demo__text">
+      <text x="141.5" y="42.4">
+        ¿{temperature} &gt;
+      </text>
+      <text x="141.5" y="58.4">
+        24?
+      </text>
+      <text x="141.5" y="148.8">
+        {temperature} &lt;- {temperature} - 3
+      </text>
+    </g>
+    <g class="flowchart-demo__label">
+      <text x="149.5" y="112.8">
+        {t('lexicon.yes')}
+      </text>
+      <text x="257" y="42.4">
+        {t('lexicon.no')}
+      </text>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .flowchart-demo {
+    display: flex;
+    justify-content: center;
+    padding: var(--pl-space-sm);
+    border: 1px solid var(--pl-line-soft);
+    border-radius: var(--pl-radius-control);
+    background: var(--pl-canvas);
+  }
+
+  .flowchart-demo__canvas {
+    width: 100%;
+    max-width: 216px;
+  }
+
+  .flowchart-demo__text {
+    font-family: var(--pl-font-ui);
+    font-size: 12px;
+    font-weight: 500;
+    fill: var(--pl-ink);
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+
+  .flowchart-demo__label {
+    font-family: var(--pl-font-ui);
+    font-size: 12px;
+    font-weight: 600;
+    fill: var(--pl-ink-2);
+    text-anchor: middle;
+    dominant-baseline: central;
+    paint-order: stroke;
+    stroke: var(--pl-canvas);
+    stroke-width: 6px;
+    stroke-linejoin: round;
+  }
+</style>

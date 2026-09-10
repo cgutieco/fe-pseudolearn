@@ -1,0 +1,16 @@
+package: fixture
+layers:
+  app: {directory: src/app, imports: [app, widgets, features, entities, shared]}
+  views: {directory: src/views, imports: [app, views, widgets, features, entities, shared]}
+  widgets: {directory: src/widgets, imports: [widgets, features, entities, shared]}
+  features: {directory: src/features, imports: [features, entities, shared]}
+  entities: {directory: src/entities, imports: [entities, shared]}
+  shared: {directory: src/shared, imports: [shared]}
+routes: {directory: src/pages, imports: [views, shared], maxLines: 14, localePrefix: en}
+unlayeredDirectories: [pages, assets]
+forbiddenDirectories: []
+exclusiveImports: {}
+globalStylesheets: src/shared/styles
+globalClassPrefix: pl-
+size: {astroFile: 40, astroTemplate: 20, typescriptFile: 30, function: 40, positionalParameters: 3, nesting: 3}
+budget: {clientJavaScriptPerRouteBytes: 100, totalJavaScriptBytes: 100, cssPerRouteBytes: 100}

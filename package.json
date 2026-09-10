@@ -1,0 +1,80 @@
+{
+  "name": "fe-pseudolearn",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "wrangler dev",
+    "deploy": "astro build && wrangler deploy",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test --project=e2e",
+    "test:a11y": "playwright test --project=a11y",
+    "test:visual": "playwright test --project=visual",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:css": "stylelint \"src/**/*.{css,astro}\"",
+    "lint:css:fix": "stylelint \"src/**/*.{css,astro}\" --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check:types": "astro check",
+    "check:architecture": "node scripts/check-architecture.mjs",
+    "check:i18n": "node scripts/check-i18n.mjs",
+    "check:text": "node scripts/check-hardcoded-text.mjs",
+    "check:routes": "node scripts/check-route-parity.mjs",
+    "check:comments": "node scripts/check-no-comments.mjs",
+    "check:brand": "node scripts/check-brand.mjs",
+    "check:css-scope": "node scripts/check-css-scope.mjs",
+    "check:size": "node scripts/check-size.mjs",
+    "check:budget": "node scripts/check-budget.mjs",
+    "check:static": "pnpm check:architecture && pnpm check:i18n && pnpm check:text && pnpm check:routes && pnpm check:comments && pnpm check:brand && pnpm check:css-scope && pnpm check:size",
+    "check:all": "pnpm format:check && pnpm lint && pnpm lint:css && pnpm check:types && pnpm check:static && pnpm test && pnpm build && pnpm check:budget",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.3.1",
+    "astro": "^7.3.2",
+    "sharp": "^0.35.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.20.2",
+    "astro-eslint-parser": "^3.1.0",
+    "eslint": "^10.10.0",
+    "eslint-plugin-astro": "^3.1.0",
+    "globals": "^17.12.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.1",
+    "postcss-html": "^2.0.0",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^1.0.0",
+    "stylelint": "^17.15.0",
+    "stylelint-config-standard": "^40.0.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.0",
+    "vitest": "^5.0.0",
+    "wrangler": "^4.130.0",
+    "yaml": "^2.9.0"
+  },
+  "lint-staged": {
+    "*.{ts,js,mjs,astro}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,astro}": [
+      "stylelint --fix"
+    ],
+    "*.{json,md,yaml,yml}": [
+      "prettier --write"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+dist/
+.astro/
+node_modules/
+pnpm-lock.yaml
+src/assets/
+public/fonts/
+test-results/
+playwright-report/
+tests/visual/**/*-snapshots/
+scripts/__fixtures__/
+design/
+docs/
+.wrangler/
+coverage/

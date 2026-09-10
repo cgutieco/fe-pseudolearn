@@ -1,0 +1,126 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { Icon } from '@shared/ui/icon';
+
+export interface Props {
+  locale: Locale;
+  privacyHref: string;
+}
+
+const { locale, privacyHref } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<div class="consent">
+  <label class="pl-checkbox" for="include-environment">
+    <input
+      type="checkbox"
+      name="includeEnvironment"
+      id="include-environment"
+      checked
+      class="pl-visually-hidden pl-checkbox__input"
+    />
+    <span class="pl-checkbox__box" aria-hidden="true">
+      <Icon name="check" size={14} strokeWidth={2.4} />
+    </span>
+    <span>
+      {t('contact.checkbox.telemetry')}
+      <span class="pl-checkbox__subtext">{t('contact.checkbox.telemetrySubtext')}</span>
+    </span>
+  </label>
+
+  <div class="consent__item">
+    <div class="consent__control">
+      <input
+        type="checkbox"
+        name="acceptPrivacy"
+        id="accept-privacy"
+        required
+        class="pl-checkbox__input consent__input"
+      />
+      <span class="pl-checkbox__box" aria-hidden="true">
+        <Icon name="check" size={14} strokeWidth={2.4} />
+      </span>
+    </div>
+    <div class="consent__content">
+      <label class="consent__label" for="accept-privacy">
+        {t('contact.checkbox.privacy')}
+      </label>
+      <span class="consent__separator" aria-hidden="true">
+        —
+      </span>
+      <a class="consent__link" href={privacyHref}>
+        {t('contact.checkbox.privacyLink')}
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .consent {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 22px;
+  }
+
+  .consent__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--pl-ink-2);
+  }
+
+  .consent__control {
+    position: relative;
+    flex: none;
+    width: 20px;
+    height: 21px;
+  }
+
+  .consent__input {
+    position: absolute;
+    top: 1px;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  .consent__content {
+    flex: 1;
+  }
+
+  .consent__label {
+    cursor: pointer;
+    color: var(--pl-ink-2);
+  }
+
+  .consent__separator {
+    color: var(--pl-ink-3);
+    margin: 0 4px;
+  }
+
+  .consent__link {
+    color: var(--pl-brand);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .consent__link:hover {
+    color: var(--pl-brand-deep);
+  }
+
+  @media (min-width: 900px) {
+    .consent {
+      margin-top: var(--pl-space-lg);
+    }
+  }
+</style>

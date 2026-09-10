@@ -1,0 +1,40 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { SelectField } from '@shared/ui/select-field';
+import { APP_AREA_IDS } from '@entities/learning-module/model/curriculum';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<div class="pl-branch pl-branch--improvement">
+  <p class="pl-overline pl-overline--brand pl-branch__label">{t('contact.branch.improvement.label')}</p>
+  <div class="pl-form-field">
+    <label class="pl-form-field__label" for="app-area-select">
+      {t('contact.branch.improvement.areaLabel')}
+    </label>
+    <SelectField id="app-area-select" name="appArea">
+      {APP_AREA_IDS.map((areaId) => (
+        <option value={areaId}>{t(`appArea.${areaId}`)}</option>
+      ))}
+    </SelectField>
+    <span class="pl-form-field__help">{t('contact.branch.improvement.areaHelp')}</span>
+  </div>
+  <div class="pl-form-field">
+    <label class="pl-form-field__label" for="friction-field">
+      {t('contact.branch.improvement.frictionLabel')}
+    </label>
+    <input
+      type="text"
+      id="friction-field"
+      name="friction"
+      class="pl-form-control"
+      placeholder={t('contact.branch.improvement.frictionPlaceholder')}
+    />
+  </div>
+</div>

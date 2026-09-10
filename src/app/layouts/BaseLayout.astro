@@ -1,0 +1,88 @@
+---
+import '@shared/styles/global.css';
+import { HTML_LANG, type Locale } from '@shared/i18n/locales';
+import { useTranslations } from '@shared/i18n/translator';
+import { SkipLink } from '@shared/ui/skip-link';
+import SeoHead from '@app/seo/SeoHead.astro';
+import SiteHeader from '@widgets/site-header/SiteHeader.astro';
+import SiteFooter from '@widgets/site-footer/SiteFooter.astro';
+import LanguageNotice from '@features/language-switch/LanguageNotice.astro';
+
+export interface Props {
+  locale: Locale;
+  path: string;
+  title: string;
+  description: string;
+  noIndex?: boolean;
+}
+
+const { locale, path, title, description, noIndex = false } = Astro.props;
+const { t } = useTranslations(locale);
+const MAIN_ID = 'main-content';
+---
+
+<!doctype html>
+<html lang={HTML_LANG[locale]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#0f4346" />
+
+    <link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/ibm-plex-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+
+    <SeoHead locale={locale} path={path} title={title} description={description} noIndex={noIndex} />
+
+    <slot name="head" />
+
+    <script is:inline>
+      try {
+        const stored = localStorage.getItem('pseudolearn-theme');
+        if (stored === 'light' || stored === 'dark') document.documentElement.dataset.theme = stored;
+      } catch (error) {
+        void error;
+      }
+    </script>
+  </head>
+  <body>
+    <SkipLink targetId={MAIN_ID} label={t('common.skipToContent')} />
+    <LanguageNotice locale={locale} path={path} />
+    <SiteHeader locale={locale} path={path} />
+    <main id={MAIN_ID}>
+      <slot />
+    </main>
+    <SiteFooter locale={locale} path={path} />
+
+    <script>
+      import { THEME_STORAGE_KEY, resolveTheme } from '@features/theme-switch/theme-preference';
+
+      const root = document.documentElement;
+      const buttons = document.querySelectorAll<HTMLButtonElement>('[data-theme-choice]');
+
+      const syncPressedState = () => {
+        const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+        const active = resolveTheme(root.dataset.theme ?? null, prefersDark);
+        for (const button of buttons) {
+          button.setAttribute('aria-pressed', String(button.dataset.themeChoice === active));
+        }
+      };
+
+      for (const button of buttons) {
+        button.addEventListener('click', () => {
+          const chosen = button.dataset.themeChoice ?? 'light';
+          root.dataset.theme = chosen;
+          try {
+            localStorage.setItem(THEME_STORAGE_KEY, chosen);
+          } catch (error) {
+            void error;
+          }
+          syncPressedState();
+        });
+      }
+
+      syncPressedState();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { ANCHORS } from '@shared/config/site';
+import { DOWNLOAD_CARDS } from './download-cards';
+import DownloadCard from './DownloadCard.astro';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<section class="downloads" id={ANCHORS.downloads}>
+  <div class="pl-container downloads__inner">
+    <p class="pl-overline pl-overline--brand">{t('home.downloads.overline')}</p>
+    <h2 class="pl-section-title downloads__title">{t('home.downloads.title')}</h2>
+
+    <div class="downloads__grid">
+      {DOWNLOAD_CARDS.map((card) => (
+        <DownloadCard locale={locale} card={card} />
+      ))}
+    </div>
+
+    <p class="pl-card--dashed downloads__upcoming">
+      <span class="pl-overline">{t('home.downloads.upcomingLabel')}</span>
+      <span>{t('home.downloads.upcomingText')}</span>
+    </p>
+  </div>
+</section>
+
+<style>
+  .downloads {
+    padding-top: 64px;
+  }
+
+  .downloads__title {
+    margin-top: 14px;
+    margin-bottom: 28px;
+    max-width: 820px;
+  }
+
+  .downloads__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .downloads__upcoming {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pl-space-xs);
+    margin-top: 14px;
+    padding: var(--pl-space-md) 18px;
+    border: 1px dashed var(--pl-line);
+    border-radius: var(--pl-radius-card);
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--pl-ink-2);
+  }
+
+  @media (min-width: 900px) {
+    .downloads {
+      padding-top: 104px;
+    }
+
+    .downloads__inner {
+      padding-top: 56px;
+      border-top: 1px solid var(--pl-line);
+    }
+
+    .downloads__title {
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+
+    .downloads__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--pl-space-lg);
+    }
+
+    .downloads__upcoming {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--pl-space-md);
+      margin-top: var(--pl-space-lg);
+      padding: 20px var(--pl-space-lg);
+      font-size: 15px;
+    }
+
+    .downloads__upcoming :global(.pl-overline) {
+      flex: none;
+    }
+  }
+</style>

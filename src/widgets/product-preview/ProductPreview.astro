@@ -1,0 +1,156 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { FALLBACK_DIMENSIONS, MOBILE_SIZES, fallbackSource, previewSources } from './preview-sources';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+const sources = await previewSources(locale);
+const fallback = await fallbackSource(locale);
+---
+
+<figure class="product-preview">
+  <div class="product-preview__frame">
+    <div class="product-preview__bar pl-only-wide" aria-hidden="true">
+      <span class="product-preview__dots">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+      <span class="product-preview__file pl-mono">{t('demo.fileName')}</span>
+      <span class="product-preview__spacer"></span>
+    </div>
+
+    <picture data-product-preview>
+      {sources.map((source) => (
+        <source
+          type={`image/${source.format}`}
+          media={source.media}
+          data-query={source.query}
+          data-scheme={source.scheme}
+          srcset={source.srcSet}
+          sizes={source.sizes}
+          width={source.width}
+          height={source.height}
+        />
+      ))}
+      <img
+        src={fallback.src}
+        srcset={fallback.srcSet.attribute}
+        sizes={MOBILE_SIZES}
+        width={FALLBACK_DIMENSIONS.width}
+        height={FALLBACK_DIMENSIONS.height}
+        alt={t('home.preview.alt')}
+        fetchpriority="high"
+        decoding="sync"
+      />
+    </picture>
+  </div>
+
+  <figcaption class="product-preview__caption">{t('home.preview.caption')}</figcaption>
+</figure>
+
+<style>
+  .product-preview {
+    margin: 0;
+  }
+
+  .product-preview__frame {
+    max-width: 390px;
+    margin-inline: auto;
+    border: 1px solid var(--pl-line);
+    border-radius: var(--pl-radius-card);
+    overflow: hidden;
+    background: var(--pl-surface);
+    box-shadow: var(--pl-shadow-3);
+  }
+
+  .product-preview__frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .product-preview__bar {
+    display: flex;
+    align-items: center;
+    gap: var(--pl-space-sm);
+    height: var(--pl-touch-target);
+    padding: 0 var(--pl-space-md);
+    background: var(--pl-sunken);
+    border-bottom: 1px solid var(--pl-line);
+  }
+
+  .product-preview__dots {
+    display: flex;
+    gap: 7px;
+  }
+
+  .product-preview__dots i {
+    width: 11px;
+    height: 11px;
+    border-radius: var(--pl-radius-pill);
+    background: var(--pl-line-strong);
+    opacity: 0.55;
+  }
+
+  .product-preview__file {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    color: var(--pl-ink-3);
+  }
+
+  .product-preview__spacer {
+    flex: 1;
+    width: 60px;
+  }
+
+  .product-preview__caption {
+    margin-top: 14px;
+    max-width: 840px;
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--pl-ink-3);
+  }
+
+  @media (min-width: 900px) {
+    .product-preview__frame {
+      max-width: none;
+    }
+
+    .product-preview__caption {
+      margin-top: var(--pl-space-md);
+      font-size: 13px;
+      line-height: 20px;
+    }
+  }
+</style>
+
+<script>
+  const preview = document.querySelector<HTMLElement>('[data-product-preview]');
+  if (preview) {
+    const syncTheme = () => {
+      const forced = document.documentElement.dataset.theme;
+      for (const source of preview.querySelectorAll<HTMLSourceElement>('source')) {
+        const base = source.dataset.query === 'all' ? '' : (source.dataset.query ?? '');
+        const scheme = source.dataset.scheme ?? 'light';
+        if (!forced) {
+          const preference = `(prefers-color-scheme: ${scheme})`;
+          source.media = base ? `${base} and ${preference}` : preference;
+        } else {
+          source.media = forced === scheme ? base || 'all' : 'not all';
+        }
+      }
+    };
+    new MutationObserver(syncTheme).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+    syncTheme();
+  }
+</script>

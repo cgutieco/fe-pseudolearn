@@ -1,0 +1,123 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { availablePlatforms, plannedPlatforms } from '@entities/platform/model/platform';
+import type { TranslationKey } from '@shared/i18n/translator';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+const available = availablePlatforms();
+const planned = plannedPlatforms();
+const LABEL_OVERRIDES: Record<string, TranslationKey> = { ios: 'home.platforms.mobileApple' };
+---
+
+<section class="platforms" aria-label={t('home.platforms.regionLabel')}>
+  <div class="pl-container platforms__row">
+    <p class="pl-overline platforms__label">{t('home.platforms.label')}</p>
+    <ul class="platforms__list">
+      {available.map((platform) => (
+        <li>
+          <span class="pl-status-dot" />
+          <b>{t(LABEL_OVERRIDES[platform.id] ?? platform.translationKey)}</b>
+          <span class="pl-mono platforms__version">{platform.minimumVersion}</span>
+        </li>
+      ))}
+      <li class="platforms__separator pl-only-wide" aria-hidden="true"></li>
+      {planned.map((platform) => (
+        <li class="platforms__pending">
+          <span class="pl-status-dot pl-status-dot--pending" />
+          {t(platform.translationKey)}
+        </li>
+      ))}
+      <li class="platforms__note pl-mono">{t('home.platforms.pendingNote')}</li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .platforms {
+    margin-top: 56px;
+    border-top: 1px solid var(--pl-line);
+    border-bottom: 1px solid var(--pl-line);
+    background: var(--pl-surface);
+  }
+
+  .platforms__row {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .platforms__label {
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .platforms__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--pl-space-sm) 20px;
+  }
+
+  .platforms__list li {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 15px;
+  }
+
+  .platforms__list b {
+    font-weight: 600;
+    color: var(--pl-ink);
+  }
+
+  .platforms__version {
+    font-size: 12px;
+    color: var(--pl-ink-3);
+  }
+
+  .platforms__pending {
+    color: var(--pl-ink-3);
+    font-weight: 500;
+  }
+
+  .platforms__note {
+    font-size: 12px;
+    color: var(--pl-ink-3);
+  }
+
+  .platforms__separator {
+    width: 1px;
+    height: 26px;
+    background: var(--pl-line);
+  }
+
+  @media (min-width: 900px) {
+    .platforms {
+      margin-top: var(--pl-space-4xl);
+    }
+
+    .platforms__row {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      height: 84px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .platforms__label {
+      flex: none;
+      margin-bottom: 0;
+    }
+
+    .platforms__list {
+      flex: 1;
+      gap: 36px;
+    }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import { SITE } from '@shared/config/site';
+import { HTML_LANG, type Locale } from '@shared/i18n/locales';
+import { alternatesFor } from '@shared/i18n/routes';
+import { useTranslations } from '@shared/i18n/translator';
+import { buildStructuredData } from './structured-data';
+
+export interface Props {
+  locale: Locale;
+  path: string;
+  title: string;
+  description: string;
+  noIndex?: boolean;
+}
+
+const { locale, path, title, description, noIndex = false } = Astro.props;
+const { t } = useTranslations(locale);
+const alternates = alternatesFor(path);
+const canonical = new URL(alternates.find((entry) => entry.locale === locale)?.path ?? path, SITE.url).href;
+const structuredData = buildStructuredData({
+  locale: HTML_LANG[locale],
+  name: title,
+  description,
+  canonical,
+});
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+{alternates.map((entry) => (
+  <link rel="alternate" hreflang={entry.locale} href={new URL(entry.path, SITE.url).href} />
+))}
+<link rel="alternate" hreflang="x-default" href={new URL('/', SITE.url).href} />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={t('common.brandName')} />
+<meta property="og:locale" content={t('common.ogLocale')} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={new URL('/og-image.png', SITE.url).href} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={new URL('/og-image.png', SITE.url).href} />
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} is:inline></script>

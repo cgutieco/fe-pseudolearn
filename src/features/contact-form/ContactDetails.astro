@@ -1,0 +1,67 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { Icon } from '@shared/ui/icon';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<div class="contact-details">
+  <div class="pl-form-field">
+    <label class="pl-form-field__label" for="name-field">
+      {t('contact.field.nameLabel')}
+    </label>
+    <input
+      type="text"
+      id="name-field"
+      name="name"
+      class="pl-form-control"
+      autocomplete="name"
+      placeholder={t('contact.field.namePlaceholder')}
+    />
+  </div>
+  <div class="pl-form-field">
+    <label class="pl-form-field__label" for="email-field">
+      {t('contact.field.emailLabel')}
+    </label>
+    <input
+      type="email"
+      id="email-field"
+      name="email"
+      class="pl-form-control"
+      autocomplete="email"
+      required
+      aria-describedby="email-error"
+      placeholder={t('contact.field.emailPlaceholder')}
+    />
+    <span class="pl-form-field__error" id="email-error" data-email-error hidden>
+      <Icon name="alert" size={15} strokeWidth={1.8} />
+      <span data-email-error-text>{t('contact.error.emailInvalid')}</span>
+    </span>
+  </div>
+</div>
+
+<style>
+  .contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pl-space-md);
+    margin-top: 22px;
+  }
+
+  @media (min-width: 900px) {
+    .contact-details {
+      flex-direction: row;
+      gap: 20px;
+    }
+
+    .contact-details :global(.pl-form-field) {
+      flex: 1;
+    }
+  }
+</style>

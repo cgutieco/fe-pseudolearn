@@ -1,0 +1,74 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { SelectField } from '@shared/ui/select-field';
+import { REPORTABLE_PLATFORMS } from '@entities/platform/model/platform';
+import { SITE } from '@shared/config/site';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<div class="pl-branch pl-branch--error">
+  <p class="pl-overline pl-overline--brand pl-branch__label">{t('contact.branch.error.label')}</p>
+  <div class="pl-branch__grid">
+    <div class="pl-form-field">
+      <label class="pl-form-field__label" for="platform-select">
+        {t('contact.branch.error.platformLabel')}
+      </label>
+      <div class="pl-form-field__pair">
+        <SelectField id="platform-select" name="platform" label={t('contact.branch.error.platformAria')}>
+          {REPORTABLE_PLATFORMS.map((platform) => (
+            <option value={platform.id}>{t(platform.translationKey)}</option>
+          ))}
+        </SelectField>
+        <input
+          type="text"
+          id="version-field"
+          name="appVersion"
+          class="pl-form-control pl-form-control--short pl-mono"
+          placeholder={t('contact.branch.error.versionPlaceholder')}
+          aria-label={t('contact.branch.error.versionAria')}
+        />
+      </div>
+    </div>
+    <div class="pl-form-field">
+      <label class="pl-form-field__label" for="step-field">
+        {t('contact.branch.error.stepLabel')}
+      </label>
+      <input
+        type="text"
+        id="step-field"
+        name="executionStep"
+        class="pl-form-control"
+        placeholder={t('contact.branch.error.stepPlaceholder')}
+      />
+    </div>
+  </div>
+  <div class="pl-form-field error-branch__snippet">
+    <label class="pl-form-field__label" for="snippet-field">
+      {t('contact.branch.error.snippetLabel')}
+    </label>
+    <textarea
+      id="snippet-field"
+      name="codeSnippet"
+      class="pl-form-control pl-form-control--textarea pl-form-control--snippet"
+      maxlength={SITE.snippetMaxLength}
+      placeholder={t('contact.branch.error.snippetPlaceholder')}
+      aria-describedby="snippet-help"
+    ></textarea>
+    <span class="pl-form-field__help" id="snippet-help">
+      {t('contact.branch.error.snippetHelp')}
+    </span>
+  </div>
+</div>
+
+<style>
+  .error-branch__snippet {
+    margin-top: 18px;
+  }
+</style>

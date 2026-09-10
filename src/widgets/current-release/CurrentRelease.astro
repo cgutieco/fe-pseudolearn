@@ -1,0 +1,207 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { Icon } from '@shared/ui/icon';
+import { ANCHORS } from '@shared/config/site';
+import { anchorOnHome } from '@shared/i18n/routes';
+import { latestRelease } from '@entities/release/model/release-catalog';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+const release = latestRelease();
+const downloadsHref = anchorOnHome(ANCHORS.downloads, locale);
+---
+
+<section class="current-release">
+  <div class="pl-container">
+    <p class="pl-overline pl-overline--brand">{t('versions.current.overline')}</p>
+    <h2 class="pl-section-title pl-section-title--sub current-release__title">
+      {t('versions.current.title')}
+    </h2>
+    <p class="pl-lede current-release__lead">{t('versions.current.lead')}</p>
+
+    <div class="pl-card current-release__card">
+      <div class="current-release__top">
+        <span class="pl-tag current-release__channel">
+          <span class="pl-status-dot"></span>
+          <span>{t('versions.channelStable')}</span>
+        </span>
+        <span class="pl-mono current-release__date">
+          {t('versions.current.published', { date: t('versions.datePlaceholder') })}
+        </span>
+      </div>
+
+      <div class="current-release__version">
+        <span class="pl-mono current-release__version-number">{release.version}</span>
+        <h3 class="current-release__version-headline">{t(`versions.release.${release.id}.headline`)}</h3>
+        <p class="current-release__version-summary">{t(`versions.release.${release.id}.summary`)}</p>
+      </div>
+
+      <p class="pl-mono current-release__requirements">{t('versions.current.requirements')}</p>
+
+      <div class="current-release__actions">
+        <a class="pl-btn pl-btn--primary pl-btn--sm" href={downloadsHref}>
+          <Icon name="download" size={18} />
+          <span>{t('versions.current.download')}</span>
+        </a>
+        <a class="pl-link-arrow" href={`#${ANCHORS.releaseHistory}`}>
+          <span>{t('versions.current.jump')}</span>
+          <Icon name="arrowRight" size={15} strokeWidth={1.8} />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .current-release {
+    padding-top: var(--pl-space-3xl);
+  }
+
+  .current-release__title {
+    margin-top: 14px;
+    max-width: 760px;
+  }
+
+  .current-release__lead {
+    margin-top: var(--pl-space-md);
+    max-width: 700px;
+  }
+
+  .current-release__card {
+    margin-top: 28px;
+    padding: 20px 18px;
+  }
+
+  .current-release__top {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .current-release :global(.pl-tag) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--pl-space-xs);
+    align-self: flex-start;
+  }
+
+  .current-release__date {
+    font-size: 13px;
+    color: var(--pl-ink-3);
+  }
+
+  .current-release__version {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--pl-space-lg);
+    padding-left: var(--pl-space-md);
+    border-left: 2px solid var(--pl-brand);
+  }
+
+  .current-release__version-number {
+    font-size: 38px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .current-release__version-headline {
+    margin: var(--pl-space-xs) 0 0;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+  }
+
+  .current-release__version-summary {
+    margin: var(--pl-space-xs) 0 0;
+    max-width: 680px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--pl-ink-2);
+  }
+
+  .current-release__requirements {
+    margin-top: var(--pl-space-lg);
+    padding-top: 18px;
+    border-top: 1px solid var(--pl-line-soft);
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--pl-ink-2);
+  }
+
+  .current-release__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pl-space-md);
+    margin-top: 22px;
+  }
+
+  .current-release__actions :global(.pl-btn) {
+    width: 100%;
+  }
+
+  .current-release__actions :global(.pl-link-arrow) {
+    justify-content: center;
+  }
+
+  @media (min-width: 900px) {
+    .current-release {
+      padding-top: var(--pl-space-4xl);
+    }
+
+    .current-release__title {
+      margin-top: 20px;
+    }
+
+    .current-release__lead {
+      margin-top: 18px;
+    }
+
+    .current-release__card {
+      margin-top: 40px;
+      padding: var(--pl-space-xl);
+    }
+
+    .current-release__top {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--pl-space-lg);
+    }
+
+    .current-release__version {
+      margin-top: 28px;
+      padding-left: var(--pl-space-lg);
+    }
+
+    .current-release__version-number {
+      font-size: 46px;
+    }
+
+    .current-release__version-headline {
+      font-size: 20px;
+    }
+
+    .current-release__requirements {
+      margin-top: 30px;
+      padding-top: 22px;
+      font-size: 13px;
+    }
+
+    .current-release__actions {
+      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+      margin-top: 26px;
+    }
+
+    .current-release__actions :global(.pl-btn) {
+      width: auto;
+    }
+  }
+</style>

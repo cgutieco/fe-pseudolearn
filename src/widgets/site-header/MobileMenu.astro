@@ -1,0 +1,114 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { Icon } from '@shared/ui/icon';
+import ThemeSwitch from '@features/theme-switch/ThemeSwitch.astro';
+import LanguageSwitch from '@features/language-switch/LanguageSwitch.astro';
+import type { NavigationLink } from './navigation';
+
+export interface Props {
+  locale: Locale;
+  path: string;
+  links: readonly NavigationLink[];
+}
+
+const { locale, path, links } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<details class="mobile-menu" data-mobile-menu>
+  <summary class="mobile-menu__button" aria-label={t('nav.menuLabel')}>
+    <Icon name="menu" size={20} strokeWidth={1.8} />
+  </summary>
+  <div class="mobile-menu__panel">
+    {links.map((link) => (
+      <a class="mobile-menu__link" href={link.href}>
+        {t(link.labelKey)}
+      </a>
+    ))}
+    <div class="mobile-menu__footer">
+      <ThemeSwitch locale={locale} compact />
+      <LanguageSwitch locale={locale} path={path} />
+    </div>
+  </div>
+</details>
+
+<style>
+  .mobile-menu {
+    position: relative;
+  }
+
+  @media (min-width: 1100px) {
+    .mobile-menu {
+      display: none !important;
+    }
+  }
+
+  .mobile-menu__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--pl-touch-target);
+    height: var(--pl-touch-target);
+    color: var(--pl-on-field-2);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .mobile-menu__button::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-menu__panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + var(--pl-space-xs));
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    min-width: 232px;
+    padding: var(--pl-space-xs);
+    border: 1px solid var(--pl-on-field-line);
+    border-radius: var(--pl-radius-card);
+    background: var(--pl-field-deep);
+    box-shadow: var(--pl-shadow-3);
+  }
+
+  .mobile-menu__link {
+    padding: var(--pl-space-sm);
+    border-radius: var(--pl-radius-control);
+    font-size: 15px;
+    color: var(--pl-on-field);
+    text-decoration: none;
+  }
+
+  .mobile-menu__link:hover {
+    background: var(--pl-on-field-hover);
+    color: var(--pl-on-field);
+  }
+
+  .mobile-menu__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--pl-space-xs);
+    margin-top: var(--pl-space-xs);
+    padding-top: 10px;
+    border-top: 1px solid var(--pl-on-field-line);
+  }
+</style>
+
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>('[data-mobile-menu]');
+  if (menu) {
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menu.open) {
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (menu.open && !menu.contains(event.target as Node)) menu.open = false;
+    });
+  }
+</script>

@@ -1,0 +1,12 @@
+---
+export interface Props {
+  targetId: string;
+  label: string;
+}
+
+const { targetId, label } = Astro.props;
+---
+
+<a class="pl-skip-link" href={`#${targetId}`}>
+  {label}
+</a>

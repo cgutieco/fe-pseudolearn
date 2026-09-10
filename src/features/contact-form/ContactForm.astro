@@ -1,0 +1,192 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { Icon } from '@shared/ui/icon';
+import { CONTACT_REASONS } from '@entities/contact-request/model/contact-request';
+import { SITE } from '@shared/config/site';
+import ReasonSelector from './ReasonSelector.astro';
+import ErrorBranch from './ErrorBranch.astro';
+import FeatureBranch from './FeatureBranch.astro';
+import ImprovementBranch from './ImprovementBranch.astro';
+import QuestionBranch from './QuestionBranch.astro';
+import MessageField from './MessageField.astro';
+import ConsentCheckboxes from './ConsentCheckboxes.astro';
+import ContactDetails from './ContactDetails.astro';
+
+export interface Props {
+  locale: Locale;
+  privacyHref: string;
+  turnstileSiteKey: string;
+}
+
+const { locale, privacyHref, turnstileSiteKey } = Astro.props;
+const { t } = useTranslations(locale);
+const DEFAULT_REASON = 'feature';
+
+const clientMessages = {
+  counter: t('contact.field.counter', { used: '{used}', total: '{total}' }),
+  emailRequired: t('contact.error.emailRequired'),
+  emailInvalid: t('contact.error.emailInvalid'),
+  emailMissingAt: t('contact.error.emailMissingAt'),
+  emailMissingDomain: t('contact.error.emailMissingDomain'),
+  sending: t('contact.submit.sending'),
+  success: t('contact.status.success'),
+  badRequest: t('contact.status.badRequest'),
+  captchaFailed: t('contact.status.captchaFailed'),
+  validationError: t('contact.status.validationError'),
+  mailFailed: t('contact.status.mailFailed'),
+  rateLimited: t('contact.status.rateLimited'),
+  networkError: t('contact.status.networkError'),
+};
+---
+
+<form
+  class="pl-card pl-branch-host contact-form"
+  method="post"
+  action="/api/contact"
+  novalidate
+  data-contact-form
+  data-locale={locale}
+  data-message-limit={SITE.messageMaxLength}
+  data-messages={JSON.stringify(clientMessages)}
+>
+  <h2 class="contact-form__title">{t('contact.form.title')}</h2>
+  <p class="contact-form__note">{t('contact.form.note')}</p>
+
+  <fieldset class="contact-form__reasons">
+    <legend class="pl-overline contact-form__legend">{t('contact.form.reasonLegend')}</legend>
+    <ReasonSelector locale={locale} defaultReason={DEFAULT_REASON} />
+    <ErrorBranch locale={locale} />
+    <FeatureBranch locale={locale} />
+    <ImprovementBranch locale={locale} />
+    <QuestionBranch locale={locale} />
+  </fieldset>
+
+  <ContactDetails locale={locale} />
+
+  <MessageField locale={locale} />
+  <ConsentCheckboxes locale={locale} privacyHref={privacyHref} />
+
+  <div class="contact-form__turnstile" data-turnstile-sitekey={turnstileSiteKey}></div>
+
+  <div class="contact-form__actions">
+    <button class="pl-btn pl-btn--primary" type="submit" data-submit-button>
+      <Icon name="send" size={18} />
+      {CONTACT_REASONS.map((reason) => (
+        <span class:list={['pl-submit-label', `pl-submit-label--${reason}`]}>
+          {t(`contact.submit.${reason}`)}
+        </span>
+      ))}
+    </button>
+    <span class="contact-form__copy-note">{t('contact.submit.copyNote')}</span>
+  </div>
+
+  <p class="contact-form__status" data-form-status role="status" aria-live="polite" hidden></p>
+</form>
+
+<style>
+  .contact-form {
+    padding: 20px 18px;
+  }
+
+  .contact-form__title {
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .contact-form__note {
+    margin: var(--pl-space-2xs) 0 18px;
+    font-size: 13px;
+    line-height: 19px;
+    color: var(--pl-ink-3);
+  }
+
+  .contact-form__reasons {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .contact-form__legend {
+    display: block;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+
+  .contact-form__turnstile:not(:empty) {
+    margin-top: var(--pl-space-md);
+  }
+
+  .contact-form__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--pl-space-sm);
+    margin-top: var(--pl-space-lg);
+    padding-top: 22px;
+    border-top: 1px solid var(--pl-line-soft);
+  }
+
+  .contact-form__copy-note {
+    font-size: 13px;
+    line-height: 19px;
+    color: var(--pl-ink-3);
+    text-align: center;
+  }
+
+  .contact-form__status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: var(--pl-space-md);
+    padding: var(--pl-space-sm) var(--pl-space-md);
+    border: 1px solid var(--pl-brand);
+    border-radius: var(--pl-radius-control);
+    background: var(--pl-brand-faint);
+    color: var(--pl-brand);
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .contact-form__status[data-tone='error'] {
+    border-color: var(--pl-danger);
+    background: transparent;
+    color: var(--pl-danger);
+  }
+
+  @media (min-width: 900px) {
+    .contact-form {
+      flex: 1;
+      padding: 36px;
+    }
+
+    .contact-form__title {
+      font-size: 24px;
+    }
+
+    .contact-form__note {
+      margin-bottom: 22px;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .contact-form__actions {
+      flex-direction: row;
+      align-items: center;
+      gap: 18px;
+      margin-top: 30px;
+      padding-top: 26px;
+    }
+
+    .contact-form__copy-note {
+      text-align: left;
+    }
+  }
+</style>
+
+<script>
+  import { attachContactForm } from './contact-form-client';
+
+  attachContactForm(document);
+</script>

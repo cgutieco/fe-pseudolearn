@@ -1,0 +1,113 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { CONTACT_REASONS } from '@entities/contact-request/model/contact-request';
+
+export interface Props {
+  locale: Locale;
+  defaultReason: string;
+}
+
+const { locale, defaultReason } = Astro.props;
+const { t } = useTranslations(locale);
+---
+
+<div class="reason-selector">
+  {CONTACT_REASONS.map((reason) => (
+    <input
+      class="pl-visually-hidden reason-selector__radio"
+      type="radio"
+      name="reason"
+      id={`reason-${reason}`}
+      value={reason}
+      checked={reason === defaultReason}
+    />
+  ))}
+
+  <div class="reason-selector__grid">
+    {CONTACT_REASONS.map((reason) => (
+      <label class="reason-selector__card" for={`reason-${reason}`} data-reason={reason}>
+        <span class="reason-selector__dot" aria-hidden="true" />
+        <span>
+          <span class="reason-selector__title">{t(`contact.reason.${reason}.title`)}</span>
+          <span class="reason-selector__description">{t(`contact.reason.${reason}.description`)}</span>
+        </span>
+      </label>
+    ))}
+  </div>
+</div>
+
+<style>
+  .reason-selector__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .reason-selector__card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--pl-space-sm);
+    padding: var(--pl-space-md);
+    border: 1px solid var(--pl-line-strong);
+    border-radius: var(--pl-radius-control);
+    background: var(--pl-surface);
+    cursor: pointer;
+  }
+
+  .reason-selector__card:hover {
+    border-color: var(--pl-brand);
+  }
+
+  .reason-selector__dot {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    border: 1px solid var(--pl-line-strong);
+    border-radius: var(--pl-radius-pill);
+  }
+
+  .reason-selector__title {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--pl-ink);
+  }
+
+  .reason-selector__description {
+    display: block;
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--pl-ink-2);
+  }
+
+  .reason-selector:has(#reason-error:checked) [data-reason='error'],
+  .reason-selector:has(#reason-feature:checked) [data-reason='feature'],
+  .reason-selector:has(#reason-improvement:checked) [data-reason='improvement'],
+  .reason-selector:has(#reason-question:checked) [data-reason='question'] {
+    border-color: var(--pl-brand);
+    background: var(--pl-brand-faint);
+    box-shadow: inset 0 0 0 1px var(--pl-brand);
+  }
+
+  .reason-selector:has(#reason-error:checked) [data-reason='error'] .reason-selector__dot,
+  .reason-selector:has(#reason-feature:checked) [data-reason='feature'] .reason-selector__dot,
+  .reason-selector:has(#reason-improvement:checked) [data-reason='improvement'] .reason-selector__dot,
+  .reason-selector:has(#reason-question:checked) [data-reason='question'] .reason-selector__dot {
+    border: 5px solid var(--pl-brand);
+  }
+
+  .reason-selector__radio:focus-visible ~ .reason-selector__grid label {
+    outline: 2px solid var(--pl-focus);
+    outline-offset: 2px;
+  }
+
+  @media (min-width: 900px) {
+    .reason-selector__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--pl-space-sm);
+    }
+  }
+</style>

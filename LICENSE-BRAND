@@ -1,0 +1,24 @@
+# Licencia de los activos de marca y de las capturas de producto
+
+Todos los derechos reservados sobre:
+
+- El nombre «PseudoLearn», el símbolo, el logotipo y cualquier lockup derivado.
+- Los archivos de `src/assets/product/` y de `public/favicon.svg`.
+- Cualquier captura de pantalla de la aplicación PseudoLearn.
+
+Estos archivos identifican un producto de código cerrado y **no** están cubiertos
+por la licencia MIT del código fuente.
+
+Se permite:
+
+- Conservarlos en clones y bifurcaciones de este repositorio con el fin de compilar,
+  estudiar o contribuir al sitio tal cual.
+
+No se permite, sin autorización expresa y por escrito:
+
+- Usarlos para identificar otro producto, servicio u organización.
+- Modificarlos, recolorearlos, deformarlos o crear obras derivadas.
+- Publicar una versión de este sitio que conserve la identidad de PseudoLearn.
+
+Si bifurcas este repositorio para tu propio proyecto, sustituye estos archivos por
+los tuyos y cambia el nombre del producto.

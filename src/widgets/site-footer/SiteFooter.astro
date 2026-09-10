@@ -1,0 +1,205 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { BrandMark } from '@shared/ui/brand-mark';
+import LanguageSwitch from '@features/language-switch/LanguageSwitch.astro';
+import { SITE } from '@shared/config/site';
+import { ROUTES, localizePath } from '@shared/i18n/routes';
+import { buildFooterColumns } from '@widgets/site-header/navigation';
+
+export interface Props {
+  locale: Locale;
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+const { t } = useTranslations(locale);
+const columns = buildFooterColumns(locale);
+---
+
+<footer class="site-footer">
+  <div class="pl-container site-footer__inner">
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <a class="site-footer__logo" href={localizePath(ROUTES.home, locale)}>
+          <BrandMark size={24} class="site-footer__symbol" />
+          <span>{t('common.brandName')}</span>
+        </a>
+        <p class="site-footer__summary">{t('footer.summary')}</p>
+        <LanguageSwitch locale={locale} path={path} variant="surface" />
+      </div>
+
+      <div class="site-footer__columns">
+        {columns.map((column) => (
+          <nav class="site-footer__column" aria-label={t(column.titleKey)}>
+            <h2 class="pl-overline site-footer__title">{t(column.titleKey)}</h2>
+            <ul class="site-footer__list">
+              {column.links.map((link) => (
+                <li>
+                  <a class="site-footer__link" href={link.href}>
+                    {t(link.labelKey)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
+    </div>
+
+    <div class="site-footer__legal">
+      <p class="site-footer__note">
+        {t('footer.developedBy')}{' '}
+        <a href={SITE.authorUrl} target="_blank" rel="noopener noreferrer">
+          {SITE.authorHandle}
+        </a>
+      </p>
+      <p class="site-footer__credits pl-mono">
+        <span>{t('footer.copyright')}</span>
+        <a href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--pl-canvas);
+    border-top: 1px solid var(--pl-line);
+  }
+
+  .site-footer__inner {
+    padding-top: 36px;
+    padding-bottom: 36px;
+  }
+
+  .site-footer__top {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .site-footer__logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: var(--pl-space-sm);
+    color: var(--pl-ink);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.022em;
+    text-decoration: none;
+  }
+
+  .site-footer :global(.site-footer__symbol) {
+    flex: none;
+    color: var(--pl-brand);
+  }
+
+  .site-footer__summary {
+    margin: 0 0 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--pl-ink-2);
+  }
+
+  .site-footer__columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--pl-space-lg) var(--pl-space-md);
+    padding-top: 20px;
+    border-top: 1px solid var(--pl-line);
+  }
+
+  .site-footer__title {
+    display: block;
+    margin: 0 0 var(--pl-space-md);
+    font-weight: 600;
+  }
+
+  .site-footer__list {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .site-footer__link {
+    font-size: 14px;
+    color: var(--pl-ink-2);
+    text-decoration: none;
+  }
+
+  .site-footer__link:hover {
+    color: var(--pl-brand);
+    text-decoration: underline;
+  }
+
+  .site-footer__legal {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--pl-line);
+  }
+
+  .site-footer__note {
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 19px;
+    color: var(--pl-ink-3);
+  }
+
+  .site-footer__credits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px var(--pl-space-md);
+    margin: 0;
+    font-size: 12px;
+    color: var(--pl-ink-3);
+  }
+
+  .site-footer__credits a {
+    color: var(--pl-ink-3);
+    text-decoration: none;
+  }
+
+  .site-footer__credits a:hover {
+    color: var(--pl-brand);
+  }
+
+  @media (min-width: 900px) {
+    .site-footer__inner {
+      padding-top: 56px;
+      padding-bottom: var(--pl-space-4xl);
+    }
+
+    .site-footer__top {
+      flex-direction: row;
+      gap: 80px;
+    }
+
+    .site-footer__brand {
+      width: 340px;
+      flex: none;
+    }
+
+    .site-footer__columns {
+      flex: 1;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 40px;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .site-footer__legal {
+      display: flex;
+      align-items: center;
+      gap: var(--pl-space-lg);
+      margin-top: var(--pl-space-2xl);
+      padding-top: var(--pl-space-lg);
+    }
+
+    .site-footer__note {
+      flex: 1;
+      margin: 0;
+    }
+  }
+</style>

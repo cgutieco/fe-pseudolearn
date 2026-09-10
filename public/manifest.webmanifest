@@ -1,0 +1,9 @@
+{
+  "name": "PseudoLearn",
+  "short_name": "PseudoLearn",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f1f5f6",
+  "theme_color": "#0f4346",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

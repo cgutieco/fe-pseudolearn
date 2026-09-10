@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fe-pseudolearn",
+  "compatibility_date": "2025-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+  },
+  "observability": {
+    "enabled": true,
+  },
+  "vars": {
+    "PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAAEvBeyJKvXydngxl",
+    "OCI_SMTP_HOST": "smtp.email.us-ashburn-1.oci.oraclecloud.com",
+    "OCI_SMTP_PORT": "587",
+    "CONTACT_FROM_ADDRESS": "no-reply@pseudolearn.app",
+    "CONTACT_TO_ADDRESS": "support@pseudolearn.app",
+  },
+}

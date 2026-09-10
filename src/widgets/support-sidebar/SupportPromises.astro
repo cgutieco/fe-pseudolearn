@@ -1,0 +1,96 @@
+---
+import { useTranslations } from '@shared/i18n/translator';
+import type { Locale } from '@shared/i18n/locales';
+import { Icon } from '@shared/ui/icon';
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { t } = useTranslations(locale);
+
+const PROMISES = [
+  { key: 'contact.sidebar.promiseHuman', positive: true },
+  { key: 'contact.sidebar.promiseReply', positive: true },
+  { key: 'contact.sidebar.promiseNoGuarantee', positive: false },
+] as const;
+---
+
+<div class="pl-card promises">
+  <p class="pl-overline pl-overline--brand promises__label">{t('contact.sidebar.promisesLabel')}</p>
+  <ul class="promises__list">
+    {PROMISES.map((promise) => (
+      <li>
+        <Icon
+          name={promise.positive ? 'check' : 'cross'}
+          size={17}
+          strokeWidth={1.9}
+          class={promise.positive ? 'promises__icon--yes' : 'promises__icon--no'}
+        />
+        <span>{t(promise.key)}</span>
+      </li>
+    ))}
+  </ul>
+  <p class="promises__response">
+    {t('contact.sidebar.responseTime')}
+    <span class="pl-mono promises__value">{t('contact.sidebar.responseTimeValue')}</span>.
+    {t('contact.sidebar.responseTimeNote')}
+  </p>
+</div>
+
+<style>
+  .promises {
+    padding: 20px 18px;
+  }
+
+  .promises__label {
+    display: block;
+    margin-bottom: var(--pl-space-sm);
+  }
+
+  .promises__list {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .promises__list li {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--pl-ink-2);
+  }
+
+  .promises__list :global(svg) {
+    margin-top: 2px;
+  }
+
+  .promises :global(.promises__icon--yes) {
+    color: var(--pl-brand);
+  }
+
+  .promises :global(.promises__icon--no) {
+    color: var(--pl-ink-3);
+  }
+
+  .promises__response {
+    margin-top: 14px;
+    padding-top: var(--pl-space-sm);
+    border-top: 1px solid var(--pl-line-soft);
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--pl-ink-2);
+  }
+
+  .promises__value {
+    color: var(--pl-ink);
+  }
+
+  @media (min-width: 900px) {
+    .promises {
+      padding: var(--pl-space-lg);
+    }
+  }
+</style>
