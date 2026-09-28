@@ -21,7 +21,7 @@ const { t } = useTranslations(locale);
       <span class="pl-status-dot"></span>
       <span>{t('versions.channelStable')}</span>
     </span>
-    <span class="pl-mono release-entry__date">{t('versions.datePlaceholder')}</span>
+    <span class="pl-mono release-entry__date">{t('versions.releaseDate')}</span>
   </div>
 
   <div class="release-entry__body">
@@ -130,7 +130,7 @@ const { t } = useTranslations(locale);
   }
 
   .release-entry :global(.release-entry__row-text code) {
-    font-family: var(--pl-font-code);
+    font-family: var(--pl-font-code), sans-serif;
     font-size: 13px;
     color: var(--pl-ink);
   }

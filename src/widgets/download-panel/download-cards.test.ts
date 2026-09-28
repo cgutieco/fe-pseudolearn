@@ -20,6 +20,17 @@ describe('DOWNLOAD_CARDS', () => {
     expect(primaryAction?.external).toBe(true);
   });
 
+  it('configures mobile download via App Store', () => {
+    const mobileCard = DOWNLOAD_CARDS[1];
+    expect(mobileCard?.actions).toHaveLength(1);
+
+    const primaryAction = mobileCard?.actions[0];
+    expect(primaryAction?.labelKey).toBe('home.downloads.mobilePrimary');
+    expect(primaryAction?.variant).toBe('pl-btn--primary');
+    expect(primaryAction?.href).toBe(SITE.iosAppStoreUrl);
+    expect(primaryAction?.external).toBe(true);
+  });
+
   it('does not contain any direct dmg action or secondary action for mac', () => {
     const macCard = DOWNLOAD_CARDS[0];
     const actionLabels = macCard?.actions.map((action) => action.labelKey) ?? [];

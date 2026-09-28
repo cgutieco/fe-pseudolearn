@@ -36,19 +36,26 @@ export const DOWNLOAD_CARDS: readonly DownloadCardModel[] = [
     specs: [
       { labelKey: 'home.downloads.specRequirements', valueKey: 'home.downloads.macRequirements' },
       { labelKey: 'home.downloads.specArchitecture', valueKey: 'home.downloads.macArchitecture' },
-      { labelKey: 'home.downloads.specVersion', valueKey: 'home.downloads.versionPlaceholder' },
-      { labelKey: 'home.downloads.specPrice', valueKey: 'home.downloads.pricePlaceholder' },
+      { labelKey: 'home.downloads.specVersion', valueKey: 'home.downloads.versionValue' },
+      { labelKey: 'home.downloads.specPrice', valueKey: 'home.downloads.priceValue' },
     ],
   },
   {
     icon: 'phone',
     titleKey: 'home.downloads.mobileTitle',
-    actions: [{ labelKey: 'home.downloads.mobilePrimary', variant: 'pl-btn--primary' }],
+    actions: [
+      {
+        labelKey: 'home.downloads.mobilePrimary',
+        variant: 'pl-btn--primary',
+        href: SITE.iosAppStoreUrl,
+        external: true,
+      },
+    ],
     specs: [
       { labelKey: 'home.downloads.specRequirements', valueKey: 'home.downloads.mobileRequirements' },
       { labelKey: 'home.downloads.specInput', valueKey: 'home.downloads.mobileInput' },
-      { labelKey: 'home.downloads.specVersion', valueKey: 'home.downloads.versionPlaceholder' },
-      { labelKey: 'home.downloads.specPrice', valueKey: 'home.downloads.pricePlaceholder' },
+      { labelKey: 'home.downloads.specVersion', valueKey: 'home.downloads.versionValue' },
+      { labelKey: 'home.downloads.specPrice', valueKey: 'home.downloads.priceValue' },
     ],
   },
 ];
